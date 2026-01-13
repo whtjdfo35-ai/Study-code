@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> css </title>
+
+    <style>
+        /* css주석 */
+
+        * {
+            color: red;
+        }
+
+        /* *는 전체 선택자 */
+
+        h2 {
+            font-size: 400%;
+        }
+
+        h1 {
+            font-size: 400%;
+        }
+
+        h1,
+        h2 {
+            color: yellowgreen;
+        }
+
+        .c1 {
+            background-color: green;
+        }
+
+        .bigtext {
+            font-size: 30px;
+        }
+
+        #il {
+            color: black;
+        }
+
+        div>strong {
+            background-color: violet;
+        }
+
+        div strong {
+            border: 3px solid red
+        }
+
+        [read-only] {
+            background-color: yellow;
+        }
+
+        [type=text] {
+            background-color: yellow;
+        }
+
+        [id=il] {
+            color: red;
+        }
+
+        /*#il은 [id=il]의 축약*/
+
+        [href^=https] {
+            background-color: pink;
+        }
+
+        /*https로 시작되는 값들*/
+
+
+        /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>12.19 */
+
+
+        [id$=_title] {
+            color: red;
+        }
+
+        /* $는 끝나는 */
+
+        [class~=c1] {
+            font-size: 35px;
+        }
+
+        /*  .c1은 [class~=c1]의 줄임말  */
+
+        input[readonly] {
+            color: red;
+        }
+
+        /* 셀렉터를 붙여쓰면 and  input태그에 readonly속성인 것*/
+
+        input[type=text] {
+            color: red;
+        }
+
+        a.c2 {
+            color: red;
+        }
+
+
+
+        #div1:hover {
+            background-color: yellow;
+        }
+
+        #div1:active {
+            background-color: purple;
+        }
+
+        .text1:focus {
+            background-color: yellow;
+        }
+
+        #ul1>li:nth-child(4) {
+            background-color: aqua;
+        }
+
+        #ul1>li:nth-child(2n+1) {
+            background-color: gray;
+        }
+
+        h3:after {
+            content: "AFTER";
+            color: black;
+        }
+
+        h3:before {
+            content: "BEFORE";
+            font-size: 15px;
+        }
+
+        #ul1 li:not(.c2) {
+            font-size: 40px;
+        }
+
+        *::selection {
+            background-color: aquamarine;
+        }
+
+        input[type=checkbox]:checked {
+            width: 30px;
+            height: 30px;
+        }
+
+        input[type=checkbox]:checked+span {
+            text-decoration: line-through;
+        }
+
+        /* 우선순위
+            !important > style 속성 > style 태그 > 브라우저 기본값 
+            태그 내에서 id 선택자 > 클래스/속성 선택자 > 태그 선택자 > 전체 선택자 
+            동등한 순위일때는 나중에 나온 것이 덮어씀
+        */
+
+        #id2 {
+            color: rgb(128, 0, 128);
+        }
+
+        .class1 {
+            color: pink;
+        }
+
+        [data-human] {
+            color: coral;
+        }
+
+        div div {
+            color: blue;
+            font-size: 32px;
+        }
+
+        div div {
+            color: skyblue !important;
+        }
+
+        .yy {
+            color: gold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1> Hello world </h1>
+    <h2> sub title </h2>
+    <ul>
+        <li class="c1" id="il"> li 1 </li>
+        <li class="c1 bigtext"> li 2 </li>
+        <li> li 3 </li>
+    </ul>
+    <br>
+
+
+    <div>
+        <strong> div > strong </strong>
+    </div>
+    <br>
+
+    <div>
+        <a href="">
+            <strong>div > a > strong</strong>
+        </a>
+    </div>
+
+    <p>
+        <span>
+            <div>
+                <strong> aa </strong>
+            </div>
+        </span>
+    </p>
+    <br>
+
+    <strong> out strong </strong>
+    <br>
+
+    <input type="text"> <br>
+    <input type="password">
+    <br><br>
+
+    <a href="http://...">http</a><br>
+    <a href="https://...">https</a><br>
+
+    <!-- >>>>>>>>>>>>>>>>12.19 -->
+
+    <table>
+        <tr>
+            <td class="no">No</td>
+            <td id="title_0">제목</td>
+            <td>글쓴이</td>
+        </tr>
+        <tr>
+            <td class="no">2</td>
+            <td id="title_2">제목2</td>
+            <td>글쓴이2</td>
+        </tr>
+        <tr>
+            <td class="no">1</td>
+            <td id="title_1">제목1</td>
+            <td>글쓴이1</td>
+        </tr>
+    </table>
+    <br><br>
+
+    <div id="div1">
+        hover
+    </div>
+    <br>
+
+    focus : <input type="number" class="text1">
+    <br><br>
+
+    <ul id="ul1">
+        <li class="c2">1</li>
+        <li class="c2">2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ul>
+    <br>
+
+    <h3> abcd </h3>
+    <br><br>
+
+    <input type="checkbox"><span>복습</span><br>
+    <input type="checkbox"><span>저녁</span><br>
+    <br>
+
+    <div class="yy">
+        yy
+        <div id="id2" class="class1" data-human="cksdks" style="color:brown">
+            priority
+        </div>
+    </div>
+    <br><br>
+
+</body>
+
+</html>

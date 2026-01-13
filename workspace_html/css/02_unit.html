@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        #pixel .box1 {
+            background-color: rgb(255,0,0); /*not inherited*/
+
+            color: #0f0;  /*inherited*/
+
+            font-size: 16px;  /*inherited*/
+        }
+        
+        #pixel .box1 .box2 {
+            background-color: rgb(0,0,255,.3);
+
+            color: #0000ffdf;
+
+            font-size: 32px;
+        }
+
+        #pixel .box3 {
+            font-size: 16px;
+        }
+
+        #percent .box1 {
+            font-size: 150%;
+        }
+
+        #percent .box1 .box2 {
+            font-size: 150%;
+        }
+
+        #percent .box3 {
+            font-size: 150%;
+        }
+
+        #em .box1 {
+            font-size: 1.5em;
+        }
+        
+        #em .box2 {
+            font-size: 1.5em;
+        }
+
+         #em .box3 {
+            font-size: 1rem;
+        }
+
+        /*[id^=v]*/
+        #v1, #v2, #v3, #v4{
+            border: 1px solid green;
+            margin: 10px;
+        }
+
+        #v1 {
+            height: 100vh; 
+            /* vh = view height 화면의 높이의 1/100 */
+        }
+        
+        #v2 {
+            width: 50vw;
+            /* vw = view width */
+            height: 20px;
+        }
+
+        #v3 {
+            height: 100vmin;
+            /* 화면의 높이와 너비 중 작은것의 1/100 */
+        }
+
+        #v4 {
+            height: 100vmax;
+        }
+
+        
+
+    </style>
+</head>
+
+<body>
+    기본글씨 abc wi ABC 123 
+    <br>
+
+    <div id="pixel">
+        <div class="box1">
+            box1
+            <div class="box2">   
+                box2 
+                <div class="box3">
+                    box3
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div id="percent">
+        <div class="box1">
+            box1 -150%
+            <div class="box2">   
+                box2 -150%
+                <div class="box3">
+                    box3-150%
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div id="em">
+        <div class="box1">
+            box1 -1.5em
+            <div class="box2">   
+                box2 -1.5em
+                <div class="box3">
+                    box3 -1rem
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    
+    <div id="v1"></div>
+    <div id="v2"></div>
+    <div id="v3"></div>
+    <div id="v4"></div>
+
+</body>
+
+</html>

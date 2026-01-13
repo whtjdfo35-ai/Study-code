@@ -1,0 +1,72 @@
+#div1{
+    border: 1px solid red;
+}
+div.block{
+    border: 1px solid red;
+    width: 200px;
+    height: 100px;
+    margin: 10px auto;
+}
+
+.inline{
+    border: 1px solid red;
+    /* width: 200px; */
+    /* height: 100px; */
+    margin: 20px 30px;
+    padding: 20px 30px;
+
+   background-color: green;
+}
+
+.parent{
+    border: dotted rgb(255, 0, 255);
+    /* width: 800px; */
+    padding: 10px 20px;
+
+    text-align: center;
+}
+
+.parent div {
+    border: 1px solid red;
+    margin : auto;
+    padding :20px;
+
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+   
+}
+
+.parent2 {
+    border: 1px dotted blue;
+    font-size: 0;
+}
+
+.parent2 div {
+    border: 1px solid red;
+    
+    display: inline-block;
+    width: 300px;
+    height: 50px;
+
+    vertical-align: top;
+
+    font-size: 16px;
+   
+}
+
+.hide{ display: none; }
+
+.table{
+    display: table;
+}
+
+.table .td{
+    display: table-cell;
+
+    border: 1px solid red;
+    height: 100px;
+    vertical-align: middle;
+}
+
+/* <<25.12.24 */

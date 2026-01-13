@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            font-size: 1.2em;
+        }
+
+        @font-face 
+        /* 웹 폰트 다운로드 명령어 */
+        {
+            font-family: 'GMarketSans';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        #p1 {
+            font-family: 'gmarketsans', arial;
+        }
+
+        .style{
+            font-style: italic;
+        }
+        .fw100{ font-weight: 100;}
+        .fw400{ font-weight: 400;}
+        .fw900{ font-weight: 900;}
+        .fw2000{ font-weight: 2000;}
+        .fwbold{ font-weight: bold;}
+        
+        /* <<<<<<<<<<<<<<<<<<<<<<<<<<25.12.22 */
+
+        .fake-h1 {
+            font-size: 2em;
+            font-weight: 500;
+        }
+        
+        .border{
+        border : 1px solid red;
+        }
+
+        .align-right{
+            text-align: right;
+        }
+
+        .align-center{
+            text-align: center;
+        }
+
+        .align-left{
+            text-align: left;
+        }
+
+        .align-justify{
+            text-align: justify
+        }
+        
+        .spacing{
+            letter-spacing: -0.1em;
+        }
+        
+        .lh{
+            line-height: 300%;
+        }
+
+        .middle {
+            border: 1px solid red;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+        
+        .nowrap{
+            border: 1px solid red;
+            width: 50vw;
+
+            white-space: nowrap;
+            overflow: hidden; 
+            /* 화면 크기 만큼만 보여줌 */
+            text-overflow: ellipsis;
+            /* 화면 넘어간 글씨있으면 점 찍음 */
+        }
+
+        .text{
+            border: 1px solid red;
+            width: 200px;
+        }
+
+        .word-wrap{
+            word-wrap: break-word;
+        }
+
+        .word-break{
+            word-break: break-all;
+        }
+
+        .td1{text-decoration: underline;}
+        .td2{text-decoration: line-through;}
+    </style>
+
+
+</head>
+
+<body>
+    기본 글씨 abc 123
+    <p id="p1">
+        글씨
+        <div> 자식 안 쪽 글씨</div>
+    </p>  
+    <div class="style">
+        font-style
+    </div>  
+
+    <div class="fw100">100</div>
+    <div class="fw400">400</div>
+    <div class="fw900">900</div>
+    <div class="fw2000">2000</div>
+    <div class="fwbold">bold</div>
+
+
+    <!-- <<<<<<<<<<<<<<<<<25.12.22 -->
+
+    <hr>
+    <h1>h1</h1>
+    <div class="fake-h1"> fake-h1 </div>
+    <hr>
+
+    <div class="align-right border"> align-right </div>
+    <div class="align-center border"> align-center </div>
+    <div class="align-left border"> align-left </div>
+    <div class="align-justify"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem maiores in voluptatem totam tenetur quasi vel, mollitia aliquam expedita sequi officia reprehenderit debitis repudiandae. Blanditiis voluptate hic saepe alias et. </div>
+    <br>
+
+    <a href="asdf" class="align-right border"> a tag </a>
+    <div class="align-right border">
+        <a href="asdf"> a tag</a>
+    </div>
+    <!-- 인라인 태그는 내용만큼만 공간 차지해서 정렬할 공간 x, 블록 태그로 감싸서 정렬시킴 -->
+    <br>
+
+    <div class="spacing"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores corporis maxime blanditiis deleniti mollitia, possimus dignissimos excepturi, exercitationem iusto laboriosam, laudantium quae cum accusantium dolor nostrum eligendi iste. Voluptas, alias! </div>
+    <br>
+
+    <div class="lh">
+        1st<br>
+        2nd
+    </div>
+    <div class="middle">
+        세로 방향 중앙 정렬
+    </div>
+    <br>
+
+    <div class="nowrap" title="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa cumque perspiciatis dolor natus provident molestias voluptatum. Pariatur aperiam voluptates delectus neque doloremque! Rerum, mollitia. Exercitationem consectetur dolore illo asperiores optio!">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa cumque perspiciatis dolor natus provident molestias voluptatum. Pariatur aperiam voluptates delectus neque doloremque! Rerum, mollitia. Exercitationem consectetur dolore illo asperiores optio!
+    </div>
+    
+    <div class="text word-wrap">
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        bbb
+        cccccccccccccccccccccccccc
+        ddddddddd
+    </div>
+
+    <div class="text word-break">
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        bbb
+        cccccccccccccccccccccccccc
+        ddddddddd
+    </div>
+
+    <div class="td1"> abcce </div>
+    <div class="td2"> abcce </div>
+
+    
+</body>
+
+</html>

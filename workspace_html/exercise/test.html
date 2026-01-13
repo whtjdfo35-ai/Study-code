@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        body {
+            height: 200vh;
+            margin: 0;
+        }
+
+        .img {
+            width: 100vw;
+            /* position: relative; */
+            /* top: 58px; */
+            /* z-index: -1; */
+        }
+
+        .menu {
+            font-size: 40px;
+            width: 100vw;
+            background-color: aquamarine;
+            text-align: center;
+            position: fixed;
+
+        }
+
+        .md {
+            position: absolute;
+            z-index: -2;
+            width: 100vw;
+            background-color: rgba(33, 108, 194, 0.144);
+
+        }
+
+        /* .menu:hover { z-index: 2; } */
+
+        .li {
+            display: none;
+            position: fixed;
+            top: 58px;
+            width: 100vw;
+            background-color: rgba(33, 108, 194, 0.144);
+            margin: 0;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        .menu:hover + .li { display: block; }
+
+        .li:hover { display: block; }
+
+        .img2{
+            position: relative;
+            top : calc();
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="menu">
+        A B C
+        <!-- <div class="md">a1 b1 c1 <br> a2 b2 c2 </div>  -->
+    </div>
+    <ul class="li">
+        <li>a1 b1 c1</li>
+        <li>a2 b2 c2</li>
+        <li>a3 b2 c3</li>
+    </ul>
+
+    <img class="img" src="https://www.fitpetmall.com/wp-content/uploads/2023/10/shutterstock_1844153299-1024x683-1.png"  alt="">
+
+    <img class="img2" src="poppy.jfif" alt="">
+</body>
+
+</html>

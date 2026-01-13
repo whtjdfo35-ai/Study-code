@@ -1,0 +1,50 @@
+#back1 {
+    /* background-color: #ffaabb; */
+    background-color: #fab;
+}
+
+#back2 {
+    border: 1px solid red;
+    height: 250px;
+
+    /* background-image: url('https://images.icon-icons.com/1861/PNG/96/phonebooth_118224.png'), url('https://mblogthumb-phinf.pstatic.net/20160427_9/gkfngkfn414_1461740691245IfBjs_JPEG/%B1%D7%B8%AE%B1%E2_%BD%AC%BF%EE_%B8%B8%C8%AD_%C4%B3%B8%AF%C5%CD_%BF%B1%B1%E2%C5%E4%B3%A2_%B8%B6%BD%C3%B8%B6%B7%CE_%BC%D5%B1%D7%B8%B2_%B0%AD%C1%C28.jpg?type=w420'); */
+    background-image: url('https://mblogthumb-phinf.pstatic.net/20160427_9/gkfngkfn414_1461740691245IfBjs_JPEG/%B1%D7%B8%AE%B1%E2_%BD%AC%BF%EE_%B8%B8%C8%AD_%C4%B3%B8%AF%C5%CD_%BF%B1%B1%E2%C5%E4%B3%A2_%B8%B6%BD%C3%B8%B6%B7%CE_%BC%D5%B1%D7%B8%B2_%B0%AD%C1%C28.jpg?type=w420');
+    background-repeat:
+        /*repeat-x repeat-y*/
+        no-repeat;
+    /* background-size: 100px 250px; */
+    /* background-size: 100% 50%;  */
+    /* background-size: 100% 100%; */
+    /* background-size: 100% 100%; */
+    background-size: cover;
+    /* background-size: contain;  */
+    /* background-size: 100px 100px;  */
+    /* background-position: right bottom; */
+    background-position: center;
+}
+
+#back3 {
+    height: 80vh;
+    background-image: url('https://i.namu.wiki/i/mJe2Iw668iROGqFa4mQc2SAOMM2PWg4OL911Woa1yoEIvCMe6CwKkrRLtxixYZlqopc426xYzYSbqZ7z7_PDfA.webp');
+    background-size: cover;
+    background-attachment: scroll;
+
+    overflow: auto;
+}
+
+#back3 p {
+    height: 200vh;
+}
+
+#back4 {
+    height: 100px;
+    background: #df8bdf url('https://images.icon-icons.com/1861/PNG/96/phonebooth_118224.png') no-repeat center
+}
+
+/* >>>>>>>>>>>>>>>>>>>>>>>12.23 */
+
+.box2 {
+    height: 50vh;
+    border: 1px solid red;
+    background-image: linear-gradient(135deg, red 10% 40%, green 60% 80%, blue 100%);
+}

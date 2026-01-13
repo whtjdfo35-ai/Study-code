@@ -1,0 +1,51 @@
+body{
+    text-align: center;
+}
+
+.p1{
+    display: inline-block;
+    text-align: left;
+    width: 500px;
+    height: 750px;
+    margin: 0 20px 50px 0;
+}
+
+.p1 .int {
+    font-weight: 1000;
+    font-size: 37px;
+    padding: 5px;
+    
+}
+
+.p1 div{
+    font-weight: normal;
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+.p1 .id{
+    margin-top: 40px;
+}
+
+.p1 .des{
+    font-style: italic;
+    border-left: 4px solid skyblue;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.p2{
+    display:  inline-block;
+    text-align: left;
+    width: 600px;
+    height: 650px;
+    vertical-align: top;    
+}  
+
+.p2 .ed{
+    width: 400px;
+    margin: 30px auto;
+}
+
+
+

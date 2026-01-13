@@ -1,0 +1,29 @@
+.q2  {
+    background-color: rgb(160, 159, 238);
+    text-align: center;
+}
+
+.q2 div{
+    display: inline-block;
+    width: 500px;
+    margin: 10px 30px;
+    vertical-align: top;
+    text-align: left;
+    }
+
+.q2 .text{
+    background-color: white;
+    line-height: 2em;
+    font-size: 20px;
+    box-sizing: border-box; height: 630px;
+}
+
+.q2 .txt{
+    width: 450px;
+    margin: 50px 10px 0 30px;
+    
+}
+.q2 .bt{
+    padding: 10px;
+    margin: 10px 0;
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form target="_blank">
+        text : <input type="text"><br>
+        text : <input><br>
+        <!-- input의 기본값은 text다 -->
+        text(value) : <input type="text" value="초기값"><br>
+        text(placeholder) : <input type="text" placeholder="플레이스 홀더"><br>
+        text(readonly) : <input type="text" value="초기값" readonly="readonly"><br>
+        <!-- readonly는 속성 값 없어도 동작 -->
+        text(disabled) : <input type="text" value="초기값" disabled="disabled"><br>
+        pw : <input type="password"><br>
+
+        <hr>
+
+        <textarea rows="10" cols="50">미리
+            보여줄 글
+        </textarea>
+        <br>
+
+        <input type="text" list="c">
+        <datalist id="c">
+            <option value="가나"></option>
+            <option value="스위스"></option>
+            <option value="브라질"></option>
+        </datalist>
+        <br>
+
+        input:button : <input type="button" value=""><br>
+        button: <button type="button"></button>
+        <!-- 버튼 타입의 기본값은 submit -->
+        <br>
+
+        submit : <input type="submit" value="전송"><br>
+        submit(value없음) : <input type="submit" ><br>
+        button : <button type="submit">버튼 submit</button>
+        <br>
+
+        reset : <input type="reset" value="기본글씨는 초기화">
+        <br>
+
+        <button type="button"><img src="poppy.jfif" alt="이미지버튼"></button>
+        <hr>
+
+        checkbox :
+        <input type="checkbox" value="1"> 샷 추가
+        <input type="checkbox" value="2"> 휘핑 추가
+        <input type="checkbox" value="3"> 펄 추가
+        <input type="checkbox" value="4"> 시럽 추가
+        <br>
+
+        radio : 
+        <input type="radio" name="china" value="1" checked="checked"> 짜장면
+        <input type="radio" name="china" value="2"> 짬뽕
+        <input type="radio" name="china" value="3"> 탕수육
+        <br>
+
+        <input type="radio" name="gender" value="1"checked="checked"> men
+        <input type="radio" name="gender" value="2"> women
+        <br>
+
+        select :
+        <select name="음식">
+            <option>한식</option>
+            <option>양식111111111</option>
+            <option selected="selected">중식</option>
+            <option>분식</option>
+            <option>일식</option>
+        </select>
+        <br>
+
+        select size :
+        <select size="3">
+            <option>한식</option>
+            <option>양식111111111</option>
+            <option selected="selected">중식</option>
+            <option>분식</option>
+            <option>일식</option>
+        </select>
+        <br>
+
+        select multiple :
+        <select size="3" multiple="multiple">
+            <option>한식</option>
+            <option>양식111111111</option>
+            <option selected="selected">중식</option>
+            <option>분식</option>
+            <option>일식</option>
+        </select>
+        <br>
+
+        label 1 : 
+        <label>
+            <input type="checkbox"> add
+        </label>
+        <br>
+
+        label 2 :
+        <label for="a"> add </label>
+        <input type="checkbox" id="a">
+        <br>
+
+        color : 
+        <input type="color">
+        <br>
+
+        date :
+        <input type="date" value="2025-12-19">
+        <input type="time">
+        <br>
+
+        number : 
+        <input type="number">
+        <br>
+
+        range :
+        <input 
+            type="range"
+            min="10"
+            max="100"
+            step="5">
+        <br> 
+        
+        <fieldset>
+            <legend> 회원정보 </legend>
+            내용        
+        </fieldset>
+        <br>
+    
+   
+    </form>
+    <br>
+
+    <form method="get">
+        <input type="text" name="abcd"><br>
+        <input type="text" name="stacy"><br>
+        <input type="submit" value="get 연습">
+    </form>
+    <br>
+
+    <form method="get" action="https://search.naver.com/search.naver?">
+        <input type="text" name="query"><br>
+        <input type="submit" value="네이버 검색">
+    </form>
+    <br>
+
+    <form method="get" action="https://www.google.com/search?">
+        <input type="text" name="q"><br>
+        <input type="submit" value="google">
+    </form>
+    <br>
+
+    <form method="post">
+        <input type="text" name="abcd"><br>
+        <input type="text" name="stacy"><br>
+        <input type="submit" value="post 연습">
+    </form>
+    
+    <br><br><br><br><br><br><br><br><br><br>
+</body>
+
+</html>

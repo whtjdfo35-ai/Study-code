@@ -1,0 +1,37 @@
+article img{
+    width: 150px;
+    float: right;
+}
+
+.box{
+    border: 1px solid red;
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}
+
+.box.left{
+    float: left;
+    border: 1px solid blue;
+}
+
+.box.right{
+    float: right;
+    border: 1px solid green;
+}
+
+.div3{
+    border: 1px solid red;
+}
+
+.clearfix:after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.logo{
+    border: 1px solid red;
+    width: 100px;
+    margin: auto;
+}

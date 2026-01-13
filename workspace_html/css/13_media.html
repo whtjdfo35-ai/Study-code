@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>media</title>
+    <style>
+        ul{
+            border: 1px solid blue;
+            list-style: none;
+            padding-left: 0;
+        }
+        li{
+            border: 1px solid red;
+            width: 100px;
+            display: inline-block;
+            text-align: center;            
+        }
+
+        span{
+            display: none;
+        }
+        
+        @media screen and (max-width: 600px){ 
+            span{
+                display: inline;
+            }
+            ul{
+                display: none;
+            }
+            li{
+                display: block;
+                width: 100%;
+            }
+            span:hover + ul{
+                display: block;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <span>menu</span>
+    <ul>
+        <li> mail </li>
+        <li> blog </li>
+        <li> webtoon </li>
+        <li> cafe </li>
+
+    </ul>
+</body>
+</html>

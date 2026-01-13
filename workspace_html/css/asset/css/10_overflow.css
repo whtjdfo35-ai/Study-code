@@ -1,0 +1,51 @@
+.v{
+    /* display: none; */
+    visibility: hidden;
+}
+
+div:hover + .v {
+    visibility: visible;
+}
+
+.op {
+    opacity: 0.5;
+}
+
+.box{
+    border: 1px solid red;
+    width: 100px;
+    height: 110px;
+    margin: 10px;
+}
+
+.box.of_hidden{
+    overflow: hidden;
+    position: relative;
+    left: 100px;
+}
+
+.box.of_scroll{
+    overflow: scroll;  
+    position: relative; 
+    left: 100px;                  
+}
+
+.box.of_scrolla{
+    overflow-y: scroll;  
+    position: relative; 
+    left: 100px; 
+}
+
+.parent div{
+    border: 1px solid red;
+    display: inline-block;
+    width: 100px;
+    margin: 5px;    
+}
+
+.parent{
+    border: 1px solid blue;
+    width: 300px;
+    white-space: nowrap;
+    overflow: scroll;
+}

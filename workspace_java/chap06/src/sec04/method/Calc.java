@@ -1,5 +1,6 @@
 package sec04.method;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Calc {
@@ -97,20 +98,49 @@ public class Calc {
 	
 
 //	Calc cc = new Calc(); 같은 클래스 안에서는 메소드를 직접 호출 가능
-	double sc(String[] input) {
-		if(input[1].equals("+")) {
-			return plus(Integer.parseInt(input[0]), Integer.parseInt(input[2]));			
+	double sc(String[] input) { //입력값을 받음
+				
+		if(input[1].equals("+")) {  //두번째 입력 값을 기호와 비교
+			return plus(Integer.parseInt(input[0]), Integer.parseInt(input[2]));
+			//첫 입력값과 세번째 입력값을 숫자로 변환
+
 		} else if(input[1].equals("/")) {
 			return divide(Integer.parseInt(input[0]), Integer.parseInt(input[2]));
+//			return divide(input[0], input[2]);
+			
 		} else if(input[1].equals("-")) {
 			return minus(Integer.parseInt(input[0]), Integer.parseInt(input[2]));
+//			return minus(input[0], input[2]);
+			
 		} else if(input[1].equals("*")) {
-			return multiple(Integer.parseInt(input[0]), Integer.parseInt(input[2]));	
+			return multiple(Integer.parseInt(input[0]), Integer.parseInt(input[2]));
+//			return multiple(input[0), input[2]);
+			
 		} else {
 			return 0;
 		}
 		
 	}
+	/*
+	double sc(ArrayList[] input) { 
+	
+		if(input[1].equals("+")) { 
+			return plus(input[0]), input[2]);
+	
+		} else if(input[1].equals("/")) {
+			return divide(input[0], input[2]);
+		
+		} else if(input[1].equals("-")) {
+			return minus(input[0], input[2]);
+		
+		} else if(input[1].equals("*")) {
+			return multiple(input[0], input[2]);
+		
+		} else {
+			return 0;
+		}
+	}
+	*/
 	
 	double sc(int x, String y, int z) {
 		if(y.equals("+")) {

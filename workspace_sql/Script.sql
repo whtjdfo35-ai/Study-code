@@ -429,10 +429,215 @@ ORDER BY D.DEPTNO, ENAME;
 
 --P.227 Q4
 SELECT D.DEPTNO, DNAME, E1.EMPNO, E1.ENAME, E1.MGR, E1.SAL, E1.DEPTNO AS DEPTNO_1, LOSAL, HISAL, GRADE, E2.EMPNO AS MGR_EMPNO, E2.ENAME AS MGR_ENAME
-FROM DEPT D LEFT OUTER JOIN EMP E1 ON (D.DEPTNO = E1.DEPTNO)
-LEFT OUTER JOIN SALGRADE S ON (E1.SAL BETWEEN LOSAL AND HISAL)
-LEFT OUTER JOIN EMP E2 ON (E1.MGR = E2.EMPNO)
+FROM DEPT D 
+	LEFT OUTER JOIN EMP E1 ON (D.DEPTNO = E1.DEPTNO)
+	LEFT OUTER JOIN SALGRADE S ON (E1.SAL BETWEEN LOSAL AND HISAL)
+	LEFT OUTER JOIN EMP E2 ON (E1.MGR = E2.EMPNO)
 ORDER BY D.DEPTNO, E1.EMPNO;
 
 
+SELECT ENAME, SAL FROM EMP e
+WHERE SAL > (SELECT SAL
+				FROM EMP
+				WHERE ENAME ='JONES')
+
+				
+SELECT rownum, e.*
+//줄 번호 매기기
+FROM EMP E
+ORDER BY SAL;
+
+SELECT rownum, e.*
+FROM (SELECT * FROM EMP ORDER BY SAL) e;
+
+
+SELECT rownum RN, e.*
+FROM (SELECT * FROM EMP ORDER BY SAL) e
+WHERE RN BETWEEN 6 AND 10;
+-- RN은 카운트 같은 기능이라 WHERE에 들어가면 1이 된다
+--invalid identifier 나온다
+--where가 select보다 먼저 동작하고 order by 가 나중에 동작해서 그렇다
+--그래서 select로 감싼다
+
+SELECT *
+FROM (SELECT rownum AS RN, e.*
+		FROM (SELECT * FROM EMP ORDER BY SAL) e)
+WHERE RN BETWEEN 6 AND 10;
+
+
+WITH E10 AS (
+	SELECT * FROM EMP WHERE DEPTNO =10)
+	
+SELECT * FROM E10;
+
+SELECT 
+	SAL,
+	ENAME,
+	(SELECT
+		GRADE
+		FROM SALGRADE s 
+		WHERE e.SAL BETWEEN losal AND hisal) AS grade
+FROM emp e;		
+
+SELECT * FROM emp;
+SELECT * FROM DEPT d;
+SELECT * FROM SALGRADE s;
+
+--q1
+--comm이 null인 사원을 급여 내름차순으로 정렬
+
+SELECT * 
+FROM emp
+WHERE comm IS NULL
+ORDER BY sal desc;
+
+
+--q2
+-- 급여 등급 별 사원 수를 등급 오름차순으로 정렬
+-- 출력 : 등급, 몇명
+SELECT grade, count(grade)
+FROM SALGRADE s JOIN EMP e ON (sal BETWEEN losal AND hisal)
+GROUP BY grade;
+
+
+--q3
+-- 출력: 이름, 급여, 급여 등급, 부서 이름
+-- 급여 등급 3 이상, 급여 등급 내림 차순, 
+-- 급여 등급이 같은 경우 급여 내림 차순
+
+SELECT ename, sal, grade, dname
+FROM emp e JOIN DEPT d ON (e.DEPTNO = d.deptno)
+			JOIN SALGRADE s  ON (sal BETWEEN losal AND hisal)
+WHERE grade >=3
+ORDER BY grade DESC, sal DESC;
+
+--q4
+-- 부서명이 SALES인 사원 중
+-- 급여 등급이 2 또는 3인 사원 급여를 내림차순으로 정렬
+SELECT dname, grade, sal 
+FROM emp e JOIN DEPT d ON (e.DEPTNO = d.deptno)
+			JOIN SALGRADE s  ON (sal BETWEEN losal AND hisal)
+WHERE dname = 'SALES'
+AND (grade = 2 OR grade = 3)
+ORDER BY sal desc;
+
+--p249 q1
+SELECT job, empno, ename, sal, e.deptno, dname
+FROM emp e JOIN DEPT d ON (e.DEPTNO = d.deptno)
+WHERE job =
+		(SELECT job
+		FROM EMP
+		WHERE ename = 'ALLEN');
+
+
+--p249 q2
+SELECT empno, ename, dname, hiredate, loc, sal, grade
+FROM EMP e JOIN dept d ON (e.DEPTNO = d.deptno)
+			JOIN SALGRADE s ON (sal BETWEEN losal AND hisal)
+WHERE sal >= (SELECT avg(sal) FROM emp) 
+ORDER BY sal desc, empno;
+
+
+--p249 q3
+SELECT empno, ename, e.JOB, e.deptno, dname, LOC 
+FROM EMP e JOIN dept d ON (e.DEPTNO = d.deptno)
+			JOIN SALGRADE s ON (sal BETWEEN losal AND hisal)
+WHERE e.deptno = 10
+AND job not in (SELECT job FROM emp WHERE deptno =30);
+
+
+---p249 q4
+SELECT empno,ename, sal, grade
+FROM EMP e JOIN SALGRADE s ON (sal BETWEEN losal AND hisal)
+WHERE sal > (SELECT max(sal) FROM emp WHERE job = 'SALESMAN')
+ORDER BY empno;
+
+
+DESC emp;
+//dbeaver라서 안됨
+SELECT * FROM emp;
+
+CREATE TABLE emp_ddl(
+	empno number(4),
+	ename varchar2(10),
+	job varchar2(9),
+	mgr number(4),
+	hiredate DATE,
+	sal number(7,2),
+	comm number(7,2),
+	deptno number(2)
+);
+
+SELECT * FROM emp_ddl;
+
+CREATE TABLE dept_ddl
+AS SELECT * from dept;
+
+SELECT * FROM dept_ddl;
+
+CREATE TABLE empept_ddl
+AS 
+SELECT empno, ename, job job2, d.deptno, dname
+FROM emp e, dept d
+WHERE 1<> 1 ;
+
+CREATE TABLE emp_alter
+AS SELECT * FROM emp;
+SELECT * FROM emp_alter;
+
+ALTER TABLE emp_alter 
+ADD hp varchar2(20);
+SELECT * FROM emp_alter;
+
+ALTER TABLE emp_alter
+RENAME COLUMN hp TO tel;
+SELECT * FROM emp_alter;
+
+ALTER TABLE emp_alter
+MODIFY empno number(5);
+
+ALTER TABLE emp_alter
+DROP COLUMN tel;
+SELECT * FROM emp_alter
+
+RENAME emp_alter TO emp_rename;
+
+TRUNCATE TABLE emp_rename;
+
+DROP TABLE emp_rename;
+
+CREATE TABLE dept_temp
+AS SELECT * FROM dept;
+
+
+INSERT INTO dept_temp (deptno, dname, loc)
+			VALUES (50, 'database', 'seoul');
+
+INSERT INTO dept_temp
+	VALUES (60, 'network', 'busan');
+
+INSERT INTO dept_temp
+	VALUES (70, '', null);
+
+--DELETE FROM dept_temp WHERE dname =' ';
+
+INSERT INTO dept_temp(deptno, loc)
+	VALUES (90, 'incheon');
+
+SELECT * FROM dept_temp;
+
+CREATE TABLE emp_temp
+	AS SELECT * FROM emp
+	WHERE 1<>1;
+
+INSERT INTO emp_temp (empno, ename, hiredate)
+	VALUES (9999,'홍길동', '2026/01/27');
+
+INSERT INTO emp_temp (empno, ename, hiredate)
+	VALUES (7051,'최민수', to_date('2026-01-27','yyyy-mm-dd'));
+
+INSERT INTO emp_temp (empno, ename, hiredate)
+	VALUES (3111,'심청이', sysdate);
+
+SELECT * FROM emp_temp;
 

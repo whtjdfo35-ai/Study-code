@@ -497,7 +497,8 @@ ORDER BY sal desc;
 -- 출력 : 등급, 몇명
 SELECT grade, count(grade)
 FROM SALGRADE s JOIN EMP e ON (sal BETWEEN losal AND hisal)
-GROUP BY grade;
+GROUP BY grade
+ORDER BY grade;
 
 
 --q3
@@ -518,7 +519,7 @@ SELECT dname, grade, sal
 FROM emp e JOIN DEPT d ON (e.DEPTNO = d.deptno)
 			JOIN SALGRADE s  ON (sal BETWEEN losal AND hisal)
 WHERE dname = 'SALES'
-AND (grade = 2 OR grade = 3)
+	AND (grade = 2 OR grade = 3)
 ORDER BY sal desc;
 
 --p249 q1
@@ -527,7 +528,8 @@ FROM emp e JOIN DEPT d ON (e.DEPTNO = d.deptno)
 WHERE job =
 		(SELECT job
 		FROM EMP
-		WHERE ename = 'ALLEN');
+		WHERE ename = 'ALLEN')
+ORDER BY sal DESC, ename;
 
 
 --p249 q2
@@ -539,11 +541,11 @@ ORDER BY sal desc, empno;
 
 
 --p249 q3
-SELECT empno, ename, e.JOB, e.deptno, dname, LOC 
+SELECT empno, ename, JOB, e.deptno, dname, LOC 
 FROM EMP e JOIN dept d ON (e.DEPTNO = d.deptno)
 			JOIN SALGRADE s ON (sal BETWEEN losal AND hisal)
 WHERE e.deptno = 10
-AND job not in (SELECT job FROM emp WHERE deptno =30);
+	AND job not in (SELECT job FROM emp WHERE deptno =30);
 
 
 ---p249 q4
@@ -639,5 +641,192 @@ INSERT INTO emp_temp (empno, ename, hiredate)
 INSERT INTO emp_temp (empno, ename, hiredate)
 	VALUES (3111,'심청이', sysdate);
 
-SELECT * FROM emp_temp;
+-----------------------------------------------------26.01.27
+
+INSERT INTO EMP_TEMP 
+SELECT * FROM emp WHERE deptno =10;
+
+INSERT ALL
+INTO  EMP_TEMP (empno,ename,hiredate)
+	VALUES (3112,'심청이2',sysdate)
+INTO  EMP_TEMP (empno,ename,hiredate)
+	VALUES (3113,'심청이3',sysdate)
+SELECT * FROM dual;
+
+SELECT  * FROM EMP_TEMP;
+
+CREATE TABLE dept_temp2
+AS SELECT * FROM dept;
+
+UPDATE dept_temp2
+SET loc ='seoul';
+
+ROLLBACK;
+
+UPDATE dept_temp2
+SET dname = 'database',
+	loc ='seoul'
+WHERE deptno = 40;
+
+UPDATE dept_temp2
+SET dname = (SELECT dname
+				FROM dept
+				WHERE deptno = 40),
+	loc = (SELECT loc
+				FROM dept
+				WHERE deptno = 40)
+WHERE deptno = 40;
+
+SELECT * FROM dept_temp2;
+
+CREATE TABLE EMP_Tmp 
+AS SELECT * FROM emp;
+
+SELECT sal, sal*1.08 FROM emp_tmp
+WHERE sal < 1000;
+
+UPDATE emp_tmp 
+SET sal = sal*1.08
+WHERE sal<1000;
+
+SELECT sal, ename FROM emp_tmp
+WHERE sal < 1080;
+
+SELECT * from emp_tmp;
+
+CREATE TABLE  emp_temp2
+AS SELECT * FROM emp;
+
+DELETE FROM emp_temp2
+WHERE job = 'MANAGER';
+
+DELETE emp_temp2;
+ROLLBACK;
+
+DELETE FROM emp_temp2
+WHERE job = 'MANAGER';
+COMMIT;
+ROLLBACK;
+
+SELECT * FROM emp_temp2;
+
+SELECT  * FROM dict;
+SELECT * FROM user_tables;
+
+
+CREATE INDEX idx_emp_sal
+ON emp(sal asc);
+
+SELECT * FROM user_indexes;
+SELECT * FROM user_ind_columns;
+
+SELECT /*+ index(e idx_emp_sal) */ -- 강제 힌트
+	ename, sal
+FROM EMP e 
+WHERE sal = 3000;
+
+DROP INDEX idx_emp_sal;
+
+CREATE VIEW vw_emp20
+AS (SELECT empno, ename,job, deptno
+	FROM emp 
+	WHERE deptno = 20);
+
+SELECT * FROM vw_emp20;
+
+CREATE TABLE dept_seq
+AS SELECT * FROM dept
+WHERE 1 != 1;
+
+SELECT * FROM dept_seq;
+
+create SEQUENCE seq_dept;
+
+SELECT seq_dept.nextval FROM dual;
+SELECT seq_dept.currval FROM dual;
+
+CREATE SEQUENCE seq_dept_10
+START WITH 10
+INCREMENT BY 10;
+
+
+SELECT seq_dept_10.nextval FROM dual;
+SELECT seq_dept_10.currval FROM dual;
+
+
+INSERT INTO dept_seq(deptno,dname,loc)
+values (seq_dept.nextval, 'database', 'seoul');
+
+SELECT * FROM dept_seq;
+
+CREATE TABLE table_pk(
+	login_id varchar2(20) PRIMARY KEY,
+	login_pwd varchar2(20) NOT NULL,
+	tel varchar2(20)
+);
+--pk 하나만 지정 가능한 방법
+
+INSERT INTO table_pk
+VALUES ('id1', 'pw1',NULL);
+
+INSERT INTO table_pk
+VALUES ('id2', NULL ,NULL);
+
+INSERT INTO table_pk(login_id)
+values(null);
+
+UPDATE table_pk
+SET login_id =NULL
+WHERE login_id = 'id1';
+
+INSERT INTO table_pk
+VALUES ('id2', 'pw2' ,NULL);
+
+UPDATE table_pk
+SET login_id = 'id1'
+WHERE login_id = 'id2';
+
+SELECT * FROM table_pk;
+SELECT * FROM user_indexes;
+
+
+CREATE TABLE table_pk2(
+	login_id varchar2(20) ,
+	login_pwd varchar2(20) ,
+	tel varchar2(20),
+	
+	PRIMARY KEY (login_id, tel)
+);
+
+--pk를 여러개 지정 가능한 방법
+CREATE TABLE table_pk3(
+	login_id varchar2(20) ,
+	login_pwd varchar2(20) ,
+	tel varchar2(20)
+);
+
+ALTER TABLE table_pk3
+add PRIMARY KEY (login_id, tel);
+
+--modify는 pk하나 지정 가능
+ALTER TABLE table_pk3
+MODIFY login_id PRIMARY key;
+
+CREATE TABLE dept_fk(
+	deptno number(2) PRIMARY KEY,
+	dname varchar2(24),
+	loc varchar2(13)
+);
+
+CREATE TABLE emp_fk(
+	empno number(4) PRIMARY KEY,
+	ename varchar2(10),
+	deptno number(2) REFERENCES dept_fk(deptno)
+);
+
+
+INSERT INTO emp_fk
+VALUES (1,'이름',null);
+
+
 

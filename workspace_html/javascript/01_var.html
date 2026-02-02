@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>var</title>
+    <script>
+        // 한 줄 주석
+        /*
+            여러줄 주석
+        */
+       console.log("hello world");
+
+    //   변수 선언 방법1
+       var a=10;
+       console.log("a: "+a);
+
+       var b="글씨";
+       console.log("b: "+b);
+
+       a = "글씨2";
+       console.log("a: "+a);
+
+       
+    // 변수 선언 방법 2;
+       c= 20;
+       console.log("c: "+c);
+
+//     변수 선언 방법3 
+       let d = 30;
+       console.log('d: '+d);
+
+    // 변수 선언 방법4   
+       const e = 40;
+       console.log('e: '+e);
+
+       d =100;
+       console.log("d: "+d);
+
+
+       let b1 =1.5;
+       let b2 = "1.5";
+       console.log(b1==b2);
+       console.log(b1 >= b2);
+       
+       console.log(b2*3)
+       console.log(b2+2)
+       console.log(b2-2)
+       //문자를 숫자로 자동 변환해서 계산해주긴 하는데
+       //더하기 할때는 문자를 숫자로 자동으로 바꿔서 연산하지 않음
+
+       b2 = "1.5";
+       console.log(parseInt(b2)+3)
+       console.log(Number(b2)+3)
+
+       let c1 = "이것"
+       console.log(c1*2)
+       console.log(isNaN(c1*2))
+
+       console.log(5/0)
+       console.log(isFinite(5/0))
+
+    //    alert("클릭하였습니다.");
+    //    let h =confirm('할거임?')
+    //    console.log('confrim h: '+h)
+
+    //    let i = prompt('비번 입력','0000')
+    //    console.log("prompt i: "+i)
+      
+    //    //두개가 같음
+    //    console.log(`입력한 글씨는 ${i} 입니다`) // 탭 위의 ` 로 감싼다
+    //    console.log("입력한 글씨는"+ i + '입니다')
+
+    //    console.error("빨강")
+
+       let j,
+            k = 10,
+            l = "what";
+
+        console.log(j,l,k)
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

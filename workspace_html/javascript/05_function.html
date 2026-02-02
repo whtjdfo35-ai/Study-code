@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>function</title>
+
+    <script>
+        function plus (x,y) {
+            //전달 인자에는 타입을 적지 않는다
+            console.log('x: ', x)
+            console.log('y: ', y)
+
+            const sum = x + y;
+            return sum
+        }
+        const z = plus(2,3)
+        console.log(z)
+
+        let c= [1,2,3]
+        function fn_arr (b){
+            console.log(typeof b)
+            console.log(b[0])
+        }
+        fn_arr(c)
+
+        console.log(1,2,3,4,5)
+
+        //spread 연산자
+        //전달인자에 쓰이면 모든 전달인자를 배열로 관리
+        function log(...obj){
+            console.log(typeof obj)
+            console.log(obj[0])
+        }
+        log(1,2,3,4,5)
+
+        function print() {
+            console.log("print 실행")
+        }
+        print()
+
+        function print() {
+            console.log("두번째 실행")
+        }
+        print()
+
+        let p = print;
+        console.log(typeof print)
+        console.log(typeof p)
+        p()
+
+        let cl = console.log
+
+        
+        //오버로딩 지원하지 않음
+        function over(){}
+        function over(x){}
+
+        //익명함수
+        let no_name = function (){
+        // funtion no_name (){ 과 같다
+            cl('익명함수')
+        }
+        no_name()
+
+        function test(a) {
+            a()
+        }
+        test(no_name)
+
+        //setTimeout(함수, 시간ms)
+        setTimeout(no_name,2000)
+        setTimeout(function (){
+            cl('익명함수3')
+        },4000)
+
+        //>>>>>>>>>>26.02.02
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

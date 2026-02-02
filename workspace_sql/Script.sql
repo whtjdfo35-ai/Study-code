@@ -828,5 +828,6 @@ CREATE TABLE emp_fk(
 INSERT INTO emp_fk
 VALUES (1,'이름',null);
 
-
+SELECT * FROM salgrade ;
+SELECT * FROM emp ;
 

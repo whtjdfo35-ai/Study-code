@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hoist</title>
+
+    <script>
+
+        function test(){
+
+            console.log(a)
+            if(true){
+                var a = 10; //호이스팅 발생. var는 함수 최상단으로 호이스팅 됨. 11번줄에서 선언한 것처럼 취급함
+                b = 20;     //호이스팅 발생. 자바스크립트 영역의 최상단으로 호이스팅 됨. 9번줄에서 선언한 것 처럼 됨
+                let c = 30;
+                const d = 40;
+            }
+            console.log('var a: ',a)
+            console.log('b: ',b)
+            // console.log('let c : ',c)
+            // console.log('const d: ',d)
+            // c,d 는 지역변수라서 에러가 난다
+        }
+
+        test();
+
+        console.log('var a: ',a)
+        console.log('b: ',b)
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

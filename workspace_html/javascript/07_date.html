@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>date</title>
+    <script>
+        const now = new Date();
+        console.log(now)
+
+        const y = now.getFullYear()
+        console.log('year:',y)
+
+        const m = now.getMonth()
+        console.log('month:', m+1)
+
+        //날짜
+        const d = now.getDate()
+        console.log('date:', d)
+
+        //요일(0:일요일)
+        const w = now.getDay()
+        console.log('day:', w)
+
+        const h = now.getHours()
+        console.log('hour:',h)
+
+        const mi = now.getMinutes()
+        console.log('minute:',mi)
+
+        const s = now.getSeconds()
+        console.log('second: ',s)
+
+        const iso = now.toISOString()
+        console.log(iso)
+        console.log(iso.split('T'))
+
+        //1900년 1월1일 0:00:00.000 을 0으로 잡고 그 이후 흐른 시간ms
+        const timestamp = now.getTime()
+        console.log(timestamp)
+
+        // let before = new Date().getTime()
+        // for(let i =0; i <1000;i++){
+        //         console.log(1)
+        // }
+        // let after = new Date().getTime()
+        // console.log(after - before)
+        let time = new Date('2026-03-27')
+        console.log(time.toISOString())
+
+        let now2 = new Date()
+        console.log(now2.getHours())
+        now2.setHours(now2.getHours()+3)
+        //시간을 변경
+        console.log(now2.getHours())
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

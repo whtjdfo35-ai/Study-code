@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String</title>
+
+    <script>
+        const str = "시 한구절 시"
+
+        console.log('str[0]: ',str[0])
+        console.log(str.length)
+
+        //indexOf 전달 인자가 있는 첫번째 인덱스 번호 리턴, 없을경우 -1
+        console.log(str.indexOf('구'))
+        // console.log('indexof:',str.indexOf(/시/g)) 
+        
+
+        //replace 첫 번째 전달 인자를 두 번째 전달인자로 교체. 단 하나만 변경
+        let str2 = str.replace('시', '분')
+        console.log('str2: ',str2)
+        console.log('str: ',str)
+
+        //정규 표현식으로 모든 글자를 변경 가능
+        str2 = str.replace(/시/g, '분')
+        console.log('str2: ',str2)
+        console.log('str: ',str)
+
+        //silce 시작 인덱스<= <끝 인덱스에서 복사
+        //원본 변경 x
+        console.log('str2: ',str.slice(2,4))
+        console.log('str: ',str)
+
+        // substr(시작인덱스, 갯수)
+        //원본 변경 x
+        str2 = str.substr(2,3)
+        console.log('str2: ',str2)
+        console.log('str: ',str)
+
+        // substring(시작 인덱스, 끝 인덱스) . 시작<= <끝. slice와 같다
+        str2 = str.substring(2,3)
+        console.log('str2: ',str2)
+        console.log('str: ',str)
+
+        //trim 문자열 앞뒤 공백 제거
+        let str3 = "            1  2  3            ";
+        str2 = str3.trim()
+        console.log(`[${str2}]`)
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

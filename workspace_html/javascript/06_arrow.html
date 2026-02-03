@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arrow</title>
+
+    <script>
+        const fn1 = function(a,b){
+            console.log(a,b)
+            return a
+        }
+
+        (function(a,b){
+            console.log(a,b)
+            return a
+        })()
+        
+        const fn2 = (a,b) => {
+            console.log(a,b)
+            return a
+        }
+        //arrow function
+        //익명함수에서 function 대신 => 쓴다
+
+        const fn3 = (a) => {
+            console.log(a)
+            return a
+        }
+
+        const fn4 = a => {
+            console.log(a)
+            return a
+        }
+        //전달 인자가 하나면 괄호 생략가능
+
+        const fn5 = () => {
+           console.log(5)
+           return 5
+        }
+       
+        const fn6 = (a,b) => {
+            return a+b
+        }
+
+        const fn7 = (a,b) => a+b
+        //실행문안에 리턴문만 있는 경우 중괄호와 return생략
+
+        const fn8 = a => a*2
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

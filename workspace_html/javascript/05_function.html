@@ -11,6 +11,13 @@
             console.log('x: ', x)
             console.log('y: ', y)
 
+            if(!x){
+                console.log("x가 거짓: ",x)
+                x=0
+            }
+            if(!y) y=0
+            //x,y에 거짓이 들어올 경우를 대비한 방어
+
             const sum = x + y;
             return sum
         }
@@ -49,6 +56,13 @@
         console.log(typeof p)
         p()
 
+        console.log(print)
+
+        // print =3
+        // console.log(typeof print)
+        // console.log(print)
+        // print() 에러남 >>이제 함수가 아니기 때문에
+
         let cl = console.log
 
         
@@ -63,19 +77,77 @@
         }
         no_name()
 
+        //callback function
         function test(a) {
             a()
         }
         test(no_name)
 
+        //>>>>>>>>>>>>>>>>>>>>>>>>>26.02.02
+
+        function test2(cb){
+            cl(typeof cb)
+            if(typeof cb == "function") {
+                cb()
+            } else{
+                cl('함수가 아닙니다')
+            }   
+        }
+        test2(function(){cl()})
+        test2(3)
+
         //setTimeout(함수, 시간ms)
+        //시간 이후에 실행 시켜준다. 다른 일이 많으면 약간 딜레이 될때도 있음
+        //아무튼 시간 안에는 실행을 안 하는것을 보장
         setTimeout(no_name,2000)
-        setTimeout(function (){
-            cl('익명함수3')
-        },4000)
+        setTimeout(
+            function (){
+                cl('익명함수3')
+            },
+            4000
+        )
 
-        //>>>>>>>>>>26.02.02
+        let idx = setTimeout(
+            function (){
+                cl('익명함수4')
+            }, 
+            1000*10
+        )
+        cl('idx: ',idx)
 
+        clearTimeout(idx)
+        //setTimeout을 취소하는 역할
+
+        let yy =10
+        setTimeout(
+            function(x,y){
+                cl(x,y)
+            },
+            1000,
+            'a',yy //setTimeout에서는 전달인자를 시간초 뒤에 쓸 수 있다
+        )
+
+        //setInterval
+        let count =0
+        let idx2 = setInterval(
+            function(){
+                cl('setInterval 실행')
+                count++  
+                if(count==10){  
+                    clearInterval(idx2)                   
+                }                         
+            } ,1000*2
+        )
+       
+        cl('count:',count)
+        
+        //자바스크립트는 덮어쓰기가 되다보니
+        //함수 밖에서 선언한 변수를 함수 안에서 변경해도 함수 밖의 변수가 바뀌지 않음
+
+        // eval()
+        let str = "console.log('eval',123)"
+        eval(str)
+        
     </script>
 </head>
 <body>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dom_form</title>
+</head>
+<body>
+    <input type="text" id="id" value="abcd"><br>
+    <input type="password" id="pw" value=""><br>
+    <input type="date" id="date"><br><br>
+
+    <input type="radio" name="ai" value="1" checked>chatGPT
+    <input type="radio" name="ai" value="2">Gemini
+    <input type="radio" name="ai" value="3">perplexity
+    <input type="radio" name="ai" value="4">claude
+
+    <br><br>
+    <input type="checkbox" class="res" value="a">중국집
+    <input type="checkbox" class="res" value="b">한식
+    <input type="checkbox" class="res" value="c">일식집
+    <br>
+
+
+    <script>
+        const text = document.querySelector('#id')
+        console.log("text.value:",text.value)
+        setTimeout(()=>{
+            // text.value = 12345
+            console.log("text.value:",text.value)
+            const pw = document.querySelector('#pw')
+            console.log('pw:',pw.value)
+        },1000*4)
+
+        const date = document.querySelector('#date')
+        console.log('date.value:',date.value)
+        date.value = '2026-02-04'
+
+        const date1 = new Date()          
+        // console.log('오늘:',date1.toISOString().split('T')[0])
+        date.value = date1.toISOString().split('T')[0]
+
+        const radio = document.querySelector('[name=ai]:checked')
+        console.log('radio:',radio.value)
+
+        const radios = document.querySelectorAll('[name=ai]')
+        radios[1].checked = true    
+
+        setTimeout( () => {
+            let checks = document.querySelectorAll('.res:checked')
+        
+            for(let ob of checks){
+                console.log("선택:",ob.value)
+            }
+        }, 1000*5)
+
+    </script>   
+</body>
+</html>

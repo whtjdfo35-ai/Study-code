@@ -31,6 +31,10 @@
         console.log('str2: ',str.slice(2,4))
         console.log('str: ',str)
 
+        //split 문자에서 구분자를 제거하고 배열로 돌려받음
+        console.log('str2.split: ',str.split(" "))
+        console.log('str: ',str)
+
         // substr(시작인덱스, 갯수)
         //원본 변경 x
         str2 = str.substr(2,3)
@@ -46,6 +50,90 @@
         let str3 = "            1  2  3            ";
         str2 = str3.trim()
         console.log(`[${str2}]`)
+
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>26.02.03
+
+        //q1. 이메일의 id출력
+        let email = "study.todair@gmail.com"
+        let e = email.split('@')
+        console.log('q1:',e[0])
+
+        let e1 = email.indexOf('@')
+        let stre = email.substring(0,e1)
+        console.log('q1:',stre)
+
+
+        //q2. 보안상 이메일의 앞 두자리를 제외하고 * 처리
+        let id = e[0].substr(0,2)
+        for(i=0;i<e[0].length-2;i++){
+            // id =id+'*'
+            id += '*'
+            // if(i == e[0].length-3){
+            //     console.log('q2:',id+'@'+e[1])
+            // }
+        }
+        console.log('q2:',id+'@'+e[1])
+        console.log(`q2: ${id}@${e[1]}`)
+
+        // 문제3
+        // 인터넷 주소 중에서 뒤에서 두 번째 도메인 출력
+        // comic.naver.com >> naver
+        // human.or.kr >> or
+
+        let address = "www.comic.naver.com"
+        let adr = address.split('.')
+        console.log("q3:",adr[adr.length-2])
+        let adr1 = address.split('.').slice(-2,-1)
+        console.log('q3:',adr1[0])
+
+        // 문제4
+        // 네이버 검색 url의 query string에서 검색어를 출력한다
+        // HINT : query=옆에있는 단어 
+        // https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=1234&ackey=po4zpvmy
+        // >> 1234
+
+        let address2 = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=1234&ackey=po4zpvmy"
+        let adr2 = address2.split('&')
+        let query = adr2.filter( el => el.indexOf('query=') != -1)
+        let qr = query[0].indexOf('='); //qurey가 배열이라 인덱스 번호 지정해야 됨
+        let srch = query[0].slice(qr+1)
+        console.log("q4:",srch)
+
+        let qi = address2.indexOf('query=')
+        let qei = address2.slice(qi).indexOf('&')
+        console.log("q4:",address2.slice(qi+6, qi+qei))
+
+        // 문제5
+        // "2026-02-05 09:14:38"
+        // 월, 분을 출력하시오
+        let date ="2026-02-05 09:14:38"
+        let dates = date.split('-')
+        console.log('month:', dates[1])
+
+        let mp = date.indexOf(':')
+        console.log('minute:', date.substr(mp+1,2))
+
+        // 문제6
+        // "   abc  "
+        // 공백의 개수는?
+        let str6 = "   a bc  "
+        // let str7 = str6.trim()
+        // let nob = str6.length - str7.length
+        // console.log('number of blank:', nob)
+        
+        let str7 = str6.split(" ") 
+        let count =0 
+        str7.forEach(el => {
+            if(el == ""){ //" "아니다 ""다
+                count++
+            }
+        })  
+        console.log(count)
+
+        
+
+       
     </script>
 </head>
 <body>

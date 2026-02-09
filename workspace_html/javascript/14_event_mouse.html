@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mouse</title>
+    <style>
+        body{
+            height: 200vh;            
+        }
+        #area{
+            margin-top: 50px;
+        }
+        #cursor{
+            position: absolute;
+            /* position: relative; 
+            top: 0px;
+            left: 0px;
+            margin-top: -100px; */            
+        }
+        #drag{
+            border: 1px solid red;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            left: 200px;
+        }
+    </style>
+    <script src="asset/js/14_event_mouse.js"></script>
+</head>
+<body>
+    
+    <div id="area" style="width: 200px;height: 100px;border: 1px solid red;">
+        굉장히 중요해서 ctrl+c로 퍼가고 싶은 글씨
+    </div>
+
+    <div id="drag">
+        drag me
+    </div>
+
+    <div id="log"></div>
+
+    <img id="cursor" style="width: 100px;" src="http://116.36.205.25:5173/uploads/1770365871225_2d1ddf4a-9ece-41ae-bf34-bf17f9cc1394.png" alt="">
+
+    
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dom</title>
+
+    <style>
+        .blue{
+            color: blue;            
+        }
+        
+        .red{
+            color: red;
+        }
+
+        .big{
+            font-size: 2em;
+        }
+    </style>
+
+</head>
+<body>
+    <h1 id="title"> DOM 연습 </h1>
+
+    <div id="view"> 1st view</div>
+    <div id="view"> 2nd view</div>
+
+    <div class="red div2">1st .div2</div>
+    <div class="div2 blue">2nd .div2</div>
+    <div class="div22 blue">3nd .div2</div>
+
+    <div id="menu">
+        <div class="div2">닭내장탕</div>
+        <div class="div3">pizza</div>
+        <div class="div4">육회</div>
+    </div>
+
+    <script>
+        console.log(document)
+
+        // getElementById()
+        //id속성 값을 이용해서 dom(html tag)을 가지고 온다
+        const title = document.getElementById('title')
+        console.log(title)
+        console.log(''+title) //주소 출력
+
+        const test = document.getElementById('test')
+        console.log(test)
+
+        let view = document.getElementById('view')
+        console.log(view)
+
+        //getElementsByTagName()
+        let divs = document.getElementsByTagName('div')
+        console.log(divs)
+
+        let h1s = document.getElementsByTagName('h1')
+        console.log(h1s)
+
+        let hu = document.getElementsByTagName('hu')
+        console.log(hu)
+
+        //getElementsByClassName()
+        const div2s = document.getElementsByClassName('div2')
+        console.log(div2s)
+
+        const menu = document.getElementById('menu')
+        console.log(menu)
+        let mns = menu.getElementsByClassName('div2')
+        console.log(mns)
+
+        //querySelector
+        let 닭 = document.querySelector('#menu .div2')
+        console.log(닭)
+
+        //querySelectorAll
+        let qs = document.querySelector('.div2')
+        console.log(qs)
+        let qsA = document.querySelectorAll('.div2')
+        console.log(qsA)
+
+       
+        
+    </script>
+</body>
+</html>

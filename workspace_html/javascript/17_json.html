@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        //json
+        //값을 key와 value로 관리
+        //순서 보장 x
+
+        //json선언
+        let json = {}
+        const v3= 'v3'
+
+        json = {
+            "key": "value",
+            "num": "1234",
+            'k1': 'v1',
+            k2:v3,
+            k3: function(){
+                console.log('함수 실행')
+            },
+            k4 : {
+                k4_1: 'v4_1',
+                k4_2: 'v4_2'
+            }
+        }
+        console.log(json)
+        console.log(''+json)
+
+        //배열처럼 접근해서 값을 출력
+        console.log("json['key']", json['key'])
+        console.log("json['num']", json['num'])
+        console.log("json['k4']['k4_1']",json['k4']['k4_1'])
+
+        // debugger;
+
+        //프로퍼티처럼 접근해서 값을 출력
+        console.log('json.num',json.num)
+
+        json['k3']()
+        json.k3()
+
+        
+        //입력
+        //key 잇으면 덮어씀
+        //없으면 추가
+        json.num =123
+        json.num2 =222
+
+        //네트워크 통신할때 무조건 문자로 전송
+        //json을 문자열로 만들어줌
+        //함수는 제외 됨
+        const str = JSON.stringify(json)
+        console.log(str)
+
+        //json 문법의 문자열을 json 객체열로 만들어줌
+        const json2 = JSON.parse(str)
+        console.log(json2)
+
+        // let j =  JSON.parse("str") //json이 아님
+        j =  JSON.parse("[]")
+        j =  JSON.parse("{}")
+
+        const aJson = [{
+            empno: 7788,
+            ename: 'scott'
+        },{
+            empno: 1234,
+            ename: 'human'
+        }]
+        for(let emp of aJson){
+            console.log(emp.ename)
+        }
+        for(let emp in aJson){
+            console.log(aJson[emp].ename)
+        }
+
+        //json의 모든 키를 배열로 돌려줌
+        const keys = Object.keys(json)
+        console.log(keys)
+
+        //key 삭제
+        delete json.num
+        console.log(json)
+    
+
+
+    </script>
+</head>
+<body>
+    <minsu class="1강의실">강사</minsu>
+</body>
+</html>

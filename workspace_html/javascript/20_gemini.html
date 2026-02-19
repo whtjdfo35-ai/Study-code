@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gemini</title>
+    <script>
+        const data = {
+            "contents": []
+        }
+        // AIzaSyC8iO6ZKr_j6m2CTP_TORx3rL6B6dmfEyE
+        // https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent
+
+        window.addEventListener('load', function () {
+            gemini();
+        })
+
+        function gemini() {
+            const ask = document.querySelector('#ask')
+            ask.addEventListener('click', function () {
+                const prompt = document.querySelector('#prompt').value
+
+                const key = 'AIzaSyC8iO6ZKr_j6m2CTP_TORx3rL6B6dmfEyE'
+                const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent'
+
+                const xhr = new XMLHttpRequest()
+                xhr.open('post', url)
+
+                xhr.setRequestHeader('x-goog-api-key', key)
+                xhr.setRequestHeader('Content-Type', 'application/json')
+
+                const data = {
+                    "contents": [{
+                        "parts": [{
+                                "text": prompt
+                        }]
+                    }]
+                }
+
+                xhr.send( JSON.stringify(data) )
+
+                xhr.onload = function(){
+                    console.log(xhr.responseText)
+                }
+            })
+
+            const ask2 = document.querySelector('#ask2')
+            ask2.addEventListener('click', function () {
+                const prompt = document.querySelector('#prompt').value
+
+                const key = 'AIzaSyC8iO6ZKr_j6m2CTP_TORx3rL6B6dmfEyE'
+                const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent'
+
+                const xhr = new XMLHttpRequest()
+                xhr.open('post', url)
+
+                xhr.setRequestHeader('x-goog-api-key', key)
+                xhr.setRequestHeader('Content-Type', 'application/json')
+
+
+                data.contents.push({
+                    "role": 'user',
+                    "parts": [{
+                        "text": prompt
+                    }]
+                })
+
+                xhr.send( JSON.stringify(data) )
+
+                xhr.onload = function(){
+                    console.log(xhr.responseText)
+
+                    data.contents.push({
+                        "role": 'model',
+                        "parts": [{
+                            "text": xhr.responseText
+                        }]
+                    })
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <textarea id="prompt"></textarea>
+    <br><input type="button" id="ask" value="질문하기">
+    <br><input type="button" id="ask2" value="멀티턴">
+    <div id="answer"></div>
+</body>
+
+</html>

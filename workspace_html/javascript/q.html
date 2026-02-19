@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #origin{
+            background-color: black;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top:300px;
+            left: 300px
+        }
+        #hour{
+            background-color: red;
+            width: 5px;
+            height: 5px;
+            position: absolute;
+            top: 250px;
+            left: 300px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- // 문제 1
+        // 다음 html의 컨텐츠를 출력하고
+        // 화면 글씨 마지막에 '~냥'을 붙여서 표시한다
+        // <div class='quiz q1'>미래님 최고다</div> -->
+    <div class='quiz q1'>미래님 최고다</div>
+
+    <!-- / 문제2
+    // 다음 코드 중 클래스 q2가 들어가 있는 모든 태그의 개수를 구하시오 -->
+
+    <div class='quiz q2'>퀴즈2</div>
+    <div class='quiz q2-1'>퀴즈2-1</div>
+    <div class='quiz q2-2'>퀴즈2-2</div>
+    <div class='quiz q2'></div>
+    <div class='quiz q2-1'>퀴즈2-1</div>
+
+    <div id="origin"></div>
+    <div id="hour"></div>
+    <div id="min"></div>
+    <div id="sec"></div>
+
+
+    <!-- // 문제3
+    // 위 코드에서 클래스 q2를 가지는 태그의 글씨를 출력하시오
+        
+        // 문제4
+        // 위 코드에서 클래스 q2를 가지는 태그 중 
+        // 글씨가 없는 태그의 내용을 '비어있음👍'으로 표시되게 바꿔주세요
+        // 이모지 : Win + . -->
+
+    <script>
+        let q1 = document.querySelector('.q1')
+        q1.textContent = q1.textContent+'냥'
+       
+
+        let q2 = document.querySelectorAll('.q2')
+        console.log(q2.length)
+
+        for(i=0;i<q2.length;i++){
+            console.log(q2[i].textContent)
+        }
+
+        for(i=0;i<q2.length;i++){
+            if(q2[i].textContent == ''){
+                q2[i].textContent = "비어있음👍"
+            }
+        }
+        for(i=0;i<q2.length;i++){
+            console.log(q2[i].textContent)
+        }
+
+       
+
+    
+
+    </Script>
+
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quiz</title>
+    <script src="asset/js/quiz.js"></script>
+    <style>
+        #tn{
+            width: 50px;
+            height: 50px;
+        }
+        #bi{
+            position: relative;
+            left:-5000px;           
+        }
+
+        
+    </style>
+</head> 
+<body>
+    <!-- q1 -->
+    <input type="text" id="id2" placeholder="아이디"><br>
+    <input type="password" id="pw2" placeholder="비밀번호"><br>
+    <div class="alr"></div>
+    <button id="login">로그인</button><br><br><br>
+
+    
+    <!-- q2 
+     // 피자 주문
+    // 피자 종류 선택 select
+    //    치즈피자, 불고기피자, 페퍼로니피자, 콤비네이션피자
+    // 사이즈 선택 radio
+    //    small(18000), medium(20000), large(22000)
+    // 도우 엣지 선택 radio
+    //    thin(0), 치즈(0), 고구마(0), 에그타르트(0), 소보로(0)
+    // 토핑 checkbox
+    //    감자(2000), 올리브(500), 페퍼로니(1000), 
+    //    고구마(2000), 새우(5000), 베이컨(3000), 파인애플(500) 
+    // [확인] 버튼 클릭 시
+    // 문제 2-1 : 총액 출력
+    // 문제 2-2 : 선택 내역과 총액 출력-->
+    피자 종류를 선택하세요 <br>
+    <select name="피자종류" id="type"> 
+        <option class="typ" value="치즈피자">치즈피자</option>
+        <option class="typ" value="불고기피자">불고기피자</option>
+        <option class="typ" value="페퍼로니피자">페퍼로니피자</option>
+        <option class="typ" value="콤비네이션피자">콤비네이션피자</option>
+    </select><br><br>
+
+    피자 사이즈를 선택하세요 <br>
+    <span><input type="radio" name="사이즈 선택" class="size" value="18000">small</span>(18000원)
+    <span><input type="radio" name="사이즈 선택" class="size" value="20000">medium</span>(20000원)
+    <span><input type="radio" name="사이즈 선택" class="size" value="22000">large </span>(22000원)
+    <br><br>
+
+    도우 엣지를 선택하세요 <br>
+    <span><input type="radio" name="도우 엣지 선택" class="edge" value="0">thin</span>(0원)
+    <span><input type="radio" name="도우 엣지 선택" class="edge" value="0">치즈</span>(0원)
+    <span><input type="radio" name="도우 엣지 선택" class="edge" value="0">고구마</span>(0원)
+    <span><input type="radio" name="도우 엣지 선택" class="edge" value="0">에그타르트</span>(0원)
+    <span><input type="radio" name="도우 엣지 선택" class="edge" value="0">소보로</span>(0원)
+    <br><br>
+
+    토핑을 선택하세요 <br>
+    <span><input type="checkbox" name="토핑" class="top" value="2000">감자</span>(2000원)
+    <span><input type="checkbox" name="토핑" class="top" value="500">올리브</span>(500원)
+    <span><input type="checkbox" name="토핑" class="top" value="1000">페퍼로니</span>(1000원)
+    <span><input type="checkbox" name="토핑" class="top" value="2000">고구마</span>(2000원)
+    <span><input type="checkbox" name="토핑" class="top" value="5000">새우</span>(5000원)
+    <span><input type="checkbox" name="토핑" class="top" value="3000">베이컨</span>(3000원)
+    <span><input type="checkbox" name="토핑" class="top" value="500">파인애플</span>(500원)
+    <br>
+    <button id="cfm">확인</button><br><br>
+    <div class="order"></div>
+    <div class="price"></div>
+    <br><br>
+
+    
+    <!-- q3
+    // 문제3
+    // 주문과 배송
+    // 주문 정보 : 이름, 주소
+    // 배송 정보 : 이름, 주소
+    //      - ㅁ 주문 정보와 배송 정보가 같습니다
+    // 체크하면 주문 정보가 배송 정보로 복사
+    // 체크 풀면 배송 정보 초기화 -->
+    <div>
+        주문 정보<br>
+        <input type="text" class="name" placeholder="이름"><br>
+        <input type="text" class="adr" placeholder="주소">
+    </div>
+    <div>
+        배송정보<br>
+        <input type="text" class="name2" placeholder="이름"><br>
+        <input type="text" class="adr2" placeholder="주소">
+    </div>
+    <input type="checkbox" class="ca">주문 정보와 배송 정보가 같습니다
+    <br><br><br>
+
+
+    <!-- q4 
+    // 인기상품순, 낮은가격순, 높은가격순, 신상품순 메뉴에서
+    // 클릭한 것만 굵은 글씨로 유지-->
+    <dl id="menu">메뉴
+        <li style="font-weight: 400;">인기 상품순</div>
+        <li style="font-weight: 400;">낮은 가격순</div>
+        <li style="font-weight: 400;">높은 가격순</div>
+        <li style="font-weight: 400;">신 상품순</div>
+    </dl>
+    <br><br>
+    
+    
+    <!-- q5 
+    // 썸네일이 있는 쇼핑몰
+    // 썸네일에 마우스 올리면 
+    // 썸네일의 이미지를 오른쪽에 크게 보여준다-->
+    <img id="tn" src="https://gdimg.gmarket.co.kr/3440418334/still/280?ver=1714724776">
+    <img id="bi" src="https://gdimg.gmarket.co.kr/3440418334/still/280?ver=1714724776">
+    <br><br>
+
+
+    <!-- q6 
+    // 할일을 적는 input, 추가 버튼
+    // 6-1 추가 버튼을 누르면
+    //      체크박스와 할일이 하단에 추가된다
+    // 6-2 개별 삭제 버튼이 있고
+    //      삭제 버튼 클릭 시 그 줄이 지워진다
+    // 6-3 전체 선택 checkbox가 있고
+    //      전체 선택 체크 시 모든 checkbox 체크
+    //      전체 선택 체크 해제 시 모든 checkbox 체크 해제
+    // 6-4 전체 선택 후 하나라도 해제되면 전체 선택도 해제
+    //      모든 항목이 체크 되어있다면 전체 선택도 체크
+    // 6-5 선택 삭제 버튼 클릭 시 선택된 내용만 삭제-->
+    <h2>할 일 목록 관리 시스템</h2>
+    <input type="text" class="todo" placeholder="할 일을 입력하세요">
+    <button class="subm">추가</button>
+    <div class="list"> 
+        <label>
+            <input type="checkbox" class="cha">전체 선택
+        </label>
+        <button class="chdel">선택 삭제</button>
+    </div>
+</body>
+</html>

@@ -140,7 +140,6 @@
             }
         }, 1000);
 
-        // ... (위쪽 HTML 및 스타일 코드는 동일) ...
 
         class Fighter {
             constructor({ position, color, side, playerNum }) {
@@ -293,7 +292,7 @@
 
                 ctx.restore();
             }
-            // ... (update 메서드는 동일) ...
+            
             update() {
                 if (this.health <= 0) {
                     if (Math.abs(this.rotation) < Math.PI / 2) {
@@ -323,7 +322,7 @@
                 }, type === 'low' ? 100 : 0);
             }
 
-            // ... (shoot 및 나머지 코드는 동일) ...
+            
             shoot() {
                 if (!this.isShootingReady || this.isBlocking || this.isStunned || gameOver) return;
                 this.isShootingReady = false;
@@ -342,8 +341,7 @@
                 setTimeout(() => { this.isStunned = false; }, 400);
             }
         }
-        // ... (이하 애니메이션 및 로직 동일) ...
-
+        
         const p1 = new Fighter({ position: { x: 150, y: 0 }, color: '#007bff', side: 'left', playerNum: 1 });
         const p2 = new Fighter({ position: { x: 600, y: 0 }, color: '#dc3545', side: 'right', playerNum: 2 });
         const keys = { a: 0, d: 0, s: 0, comma: 0, dot: 0, Left: 0, Right: 0, Down: 0, n1: 0, n2: 0 };

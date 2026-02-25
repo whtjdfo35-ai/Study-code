@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .status {
+            border: 1px solid gray;
+            width: 15vw;
+            height: 15vh;
+        }        
+    </style>
+    <script>
+        const machine = {
+            state: "대기중",
+            error: null,
+            raw: 50,
+            product: 0,
+
+            run() {
+                if (this.raw <= 0) {
+                    this.state = "에러"
+                    this.error = "E01 (원재료 없음)"
+                    updateUI()                    
+                }
+
+                this.state = "가동중"
+                updateUI()
+                this.raw--              
+                this.product++
+
+            },
+
+            stop() {
+                this.state = "정지"
+                updateUI()
+                document.querySelector
+            }
+        }
+        function updateUI() {
+            document.querySelector(".state").textContent = machine.state
+            document.querySelector(".emsg").textContent = machine.error ?? "없음"
+            document.querySelector(".count").textContent = machine.product
+            document.querySelector(".nraw").textContent = machine.raw
+        }
+
+       
+        document.querySelector("#run").addEventListener("click", () => {
+            machine.run()
+        })
+
+        document.querySelector("#stop").addEventListener("click", () => {
+            machine.stop()
+        })
+    </script>
+</head>
+
+<body>
+    <div id="m1"> <h2>장비1</h2>
+        <div class="status">장비상태
+            <div>현재 상태: <span class="state">대기중</span></div>
+            <div class="error">에러코드: <span class="emsg"></span> </div>
+            <div class="nProduct">완제품 갯수: <span class="count">0</span> </div>
+        </div>
+        <div class="Raw">원재료 수량 <span class="nraw">50</span></div>
+        <button id="run">run</button>
+        <button id="stop">stop</button>
+    </div>
+   
+        
+</body>
+
+</html>

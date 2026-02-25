@@ -31,7 +31,7 @@ public class ExceptionExam {
 	void test(){
 		try {
 			
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

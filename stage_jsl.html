@@ -6,24 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage</title>
     <style>
-        body{
-           background-color: #08C69C;
+        body {
+            background-color: #08C69C;
         }
+
         #gameArea {
-            background-color: #08C69C;            
+            background-color: #08C69C;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
         }
 
-        .disapear {
+        .disappear {
             position: relative;
             top: -5000px
         }
 
         .text {
-            margin-left: 40vw;
             margin-top: 40vh;
+            text-align: center;
         }
 
         .title {
@@ -40,17 +41,68 @@
             height: 30px;
             border-radius: 50%;
             position: absolute;
-            top: 55vh;
-            left: 50vw;
+            top: 59vh;
+            left: 46vw;
+            z-index: 10;
         }
 
-        .hint{
+        #input {
+            font-size: 24px;
+            position: relative;
+            left: 35vw;
+            width: 30vw;
+            z-index: 2;
+        }
+
+        #consoleOutput {
+            position: absolute;
+            bottom: 20vh;
+            left: 35vw;
+            width: 30vw;
+            height: 150px;
+            color: #C94C2A;
+            font-size: 32px;
+            text-align: center;
+
+        }
+
+        .hint {
             position: relative;
             z-index: -1;
+            font-size: 24px;
+        }
+
+        #hint2 {
+            position: absolute;
+            right: 15vw;
+            top: 20vh;
+        }
+
+        #hint2a {
+            position: absolute;
+            right: 20vw;
+            top: 80vh;
+        }
+
+        #hint5a {
+            position: absolute;
+            left: 30vw;
+            top: 10vh;
+        }
+
+        .goal {
+            transform: scale(1);
+            transition: transform 2s ease, opacity 2s ease;
+        }
+
+        .small {
+            transform: scale(0.1);
+            opacity: 0;
         }
     </style>
-    <script>
+    <script>        
         window.onload = () => {
+
             //game화면 크기설정
             document.querySelector('#gameArea').clientHeight = window.innerHeight
             document.querySelector('#gameArea').clientWidth = window.innerWidth
@@ -58,31 +110,24 @@
             document.querySelector('#gameArea').onselectstart = () => false
             document.querySelector('#gameArea').oncontextmenu = () => false
 
-            //object움직임
+            //키보드 입력시 이벤트
+            //object움직임           
             document.addEventListener('keydown', objectMove)
-
-            const hint1 = getComputedStyle(document.querySelector('#hint1'))
+            //입력창에 입력            
+            document.addEventListener('keyup', consoleInput)
 
             //기믹 생성
-            //goal에 disapear클래스 부여해서 위치를 화면 밖으로 이동시킴
+            //goal에 disappear클래스 부여해서 위치를 화면 밖으로 이동시킴
             document.querySelector('body').addEventListener('mousemove', evt => {
-                document.querySelector('.goal').classList.add('disapear')
+                document.querySelector('.goal').classList.add('disappear')
             })
 
             //goal에 마우스 올리면 위치 랜덤하게 변경
             document.querySelector('.goal').addEventListener('mouseover', goalJump)
 
-            //goal을 하얀색 글씨로 만듬/ 트리거 기믹은 ?
-            // goalWhite()
-
             //goal을 클릭했을때 z인덱스를 사용하여 화면 뒤로 보낼예정
             document.querySelector('.goal').addEventListener('click', goalZ)
-
-            //다른 무언가가 와서 goal가려서 클릭 못하게 하기
-
-            //hint주기
-            revealHint()
-
+            
             //클리어 조건
             //goal을 더블 클릭
             document.querySelector('.goal').addEventListener('dblclick', evt => {
@@ -91,33 +136,37 @@
             })
         }
 
+        //기믹
         //goal에 마우스 올리면 위치 랜덤하게 변경
         function goalJump(evt) {
             document.querySelector('.goal').style.position = 'absolute'
             document.querySelector('.goal').style.top = Math.random() * (window.innerHeight - (document.querySelector('.goal').clientHeight)) + 'px'
             document.querySelector('.goal').style.left = Math.random() * (window.innerWidth - (document.querySelector('.goal').clientWidth)) + 'px'
         }
-
-        //goal을 하얀색 글씨로 만듬
-        function goalWhite() {
-            document.querySelector('.goal').style.color = "white"
-        }
-
+        
         //goal을 클릭했을때 z인덱스를 사용하여 화면 뒤로 보낼예정
         function goalZ() {
             document.querySelector('.goal').style.position = "absolute"
             document.querySelector('.goal').style.zIndex = -20
+        }        
+
+        //마지막에 goal의 글씨를 줄임
+        function goalSmall() {
+            document.querySelector('.goal').classList.add('small')
+            goalJump()
+            document.querySelector('body').addEventListener('dblclick', evt =>{
+                print('느려')
+            })            
         }
 
         //object 움직임        
         function objectMove(evt) {
             const obj = getComputedStyle(document.querySelector('#object'))
-                   
             //obj가 움직일 거리
-            let up = 10
-            let down = 10
-            let right = 10
-            let left = 10
+            let up = 20
+            let down = 20
+            let right = 20
+            let left = 20
 
             //object의 움직임 범위를 화면 범위로 제한
             if (parseInt(obj.top) > (window.innerHeight - (document.querySelector('#object').clientHeight))) {
@@ -146,17 +195,138 @@
             if (evt.key === 'ArrowDown') {
                 document.querySelector('#object').style.top = parseInt(obj.top) + down + 'px'
             }
+
+            //오브젝트가 힌트 근처로 접근하면 보이는 힌트들
+            const hint1 = getComputedStyle(document.querySelector('#hint1'))
+            revealHint1()
+
+            const hint2 = getComputedStyle(document.querySelector('#hint2'))
+            revealHint2()
+
+            const hint2a = getComputedStyle(document.querySelector('#hint2a'))
+            revealHint2a()
+
+            const hint5a = getComputedStyle(document.querySelector('#hint5a'))
+            revealHint5a()
         }
 
-        //힌트 주기
-        function revealHint(){
-            if(document.querySelector('#object').style.left == hint1.offsetLeft){
+        //입력창에 입력하고 엔터 치면 콘솔에서 실행 & 내용 지우기
+        function consoleInput(evt) {
+            //사용자가 쓰기 편하게 짧은 키워드 만들어두기            
+            const style = document.querySelector('.goal').style
+
+            if (evt.key === 'Enter') {
+                const input = document.querySelector('#input').value
+                try {
+                    //hint2b 'style?'입력
+                    if (input.trim() == 'style?' || input.trim() == 'style.top?') {
+                        print("const style = document.querySelector('.goal').style")
+                    }
+
+                    //hint3 "STOP"입력하기
+                    if (input.trim() == 'stop') {
+                        print('작습니다')
+                    }
+                    if (input.trim() == 'STOP') {
+                        print('S = 83')
+                    }
+                    //STOP의 아스키 코드를 입력하면 goal이 멈춤                                    
+                    if (input == 83847980) {
+                        const stop = document.querySelector('.goal').removeEventListener('mouseover', goalJump)
+                        console.log(eval(stop))
+                        print('')
+                    }
+
+                    //hint4 style.zIndex로 안 된다는 힌트를 줌
+                    if(input.trim().substr(0,12) == 'style.zIndex'){
+                        print('일어날까요?')
+                    }
+                    //zindex 조정 및 글자 작아지는 기믹 실행
+                    if (input.trim() == '기상') {
+                        document.querySelector('.goal').removeEventListener('click', goalZ)
+                        style.zIndex = 2
+                        goalSmall()
+                    }
+
+                    //hint5 폰트 사이즈 조정으로 안 됨을 알려줌
+                    if(input.trim().substr(0,10) == 'style.font'){
+                        print('transform')
+                    } 
+                    //transform을 사용하면 힌트5a찾을수 있게 함   
+                    if(input.trim().substr(0,15) == 'style.transform'){
+                       document.querySelector('#hint5a').style.zIndex = -2                                              
+                    }
+
+                    //test용
+                    if (input == 1) {
+                        style.top = 0 + 'px'
+                        document.querySelector('.goal').removeEventListener('mouseover', goalJump)
+                        // document.querySelector('.goal').removeEventListener('click', goalZ)
+                    }
+                    
+                    console.log(eval(input))
+                } finally {
+                    document.querySelector('#input').value = ''
+                }
+            }
+        }
+
+        //출력창
+        function print(msg) {
+            const output = document.querySelector('#consoleOutput')
+            output.innerHTML = ''
+            output.innerHTML += msg
+            output.scrollTop = output.scrollHeight
+        }
+
+        //힌트1 오브젝트가 힌트 근처로 접근
+        function revealHint1() {
+            const obj = getComputedStyle(document.querySelector('#object'))
+            if (parseInt(obj.left) >= hint1.offsetLeft - 20
+                && parseInt(obj.left) <= hint1.offsetLeft + 400
+                && parseInt(obj.top) <= hint1.offsetTop + 40
+                && parseInt(obj.top) >= hint1.offsetTop - 40) {
                 hint1.style.zIndex = 2
             }
         }
-        
-    </script>
 
+        //힌트2 오브젝트가 힌트 근처로 접근
+        function revealHint2() {
+            const obj = getComputedStyle(document.querySelector('#object'))
+            if (parseInt(obj.left) >= 0.7 * window.innerWidth - 20
+                && parseInt(obj.left) <= 0.7 * window.innerWidth + 300
+                && parseInt(obj.top) <= 0.2 * window.innerHeight + 60
+                && parseInt(obj.top) >= 0.2 * window.innerHeight - 60) {
+                hint2.style.zIndex = 2
+            }
+        }
+
+        //힌트2a hint2가 공개 &오브젝트가 힌트 근처로 접근
+        function revealHint2a() {
+            const obj = getComputedStyle(document.querySelector('#object'))
+            if (hint2.style.zIndex >= 1) {                
+                if (parseInt(obj.left) >= 0.7 * window.innerWidth - 20
+                    && parseInt(obj.left) <= 0.7 * window.innerWidth + 300
+                    && parseInt(obj.top) <= 0.8 * window.innerHeight + 60
+                    && parseInt(obj.top) >= 0.8 * window.innerHeight - 60) {
+                    hint2a.style.zIndex = 2                    
+                }
+            }
+        }
+
+        //hint5a hint5가 공개 &오브젝트가 힌트 근처로 접근
+        function revealHint5a(){
+            const obj = getComputedStyle(document.querySelector('#object'))
+            if ( hint5a.style.zIndex == -2 )  {                
+                if (parseInt(obj.left) >= 0.3 * window.innerWidth - 20
+                    && parseInt(obj.left) <= 0.3 * window.innerWidth + 300
+                    && parseInt(obj.top) <= 0.1 * window.innerHeight + 60
+                    && parseInt(obj.top) >= 0.1 * window.innerHeight - 60) {
+                    hint5a.style.zIndex = 2                    
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -166,7 +336,13 @@
             <div class="des">사라진 나를 찾아주세요</div>
         </div>
         <div id="object"></div>
+        <textarea id="input"></textarea>
+        <div></div>
         <span id="hint1" class="hint">사라진 글자를 찾아서 더블 클릭 하세요</span>
+        <div><span id="hint2" class="hint">나는 위로 올라갔어요</span></div>
+        <div><span id="hint2a" class="hint">style.top</span></div>
+        <div><span id="hint5a" class="hint">은신 중</span></div>
+        <div id="consoleOutput"></div>
     </div>
 </body>
 

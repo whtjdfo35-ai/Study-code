@@ -160,10 +160,8 @@ public class UserDAO {
 			ps.setString(1, userDTO.getId());
 			ps.setString(2, userDTO.getPw());
 
-			// SQL 실행 및 결과 확보 (영향받은 줄 수 나옴 )
 			result = ps.executeUpdate();
-			System.out.println("insert 결과 :" + result);
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

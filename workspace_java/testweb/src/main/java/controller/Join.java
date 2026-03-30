@@ -32,6 +32,7 @@ public class Join extends HttpServlet {
 		UserService userservice = new UserService();
 		int result = userservice.addUser(userDTO);
 		
+		response.sendRedirect("/proj03_1_todo/todo");
 	}
 	
 

@@ -831,3 +831,18 @@ VALUES (1,'이름',null);
 SELECT * FROM salgrade ;
 SELECT * FROM emp ;
 
+
+CREATE TABLE userInfo(
+	id varchar2(20),
+	pw varchar2(20),
+	tel number(11)
+);
+
+INSERT INTO userInfo
+VALUES ('aa','a1234',01011112222);
+
+INSERT INTO userInfo
+VALUES ('bb','b1234',01011113333);
+
+SELECT * FROM userInfo;
+

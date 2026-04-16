@@ -74,8 +74,9 @@
 			<div class="menu-group">
 				<button class="menu-title open" type="button">4. 작업관리</button>
 				<div class="menu-items open">
-					<a href="${pageContext.request.contextPath}/workorder/list">작업
-						지시 등록/조회</a> <a href="#">작업 현황 조회</a>
+					<a href="${pageContext.request.contextPath}/woreginq">작업
+						지시 등록/조회</a> 
+					<a href="${pageContext.request.contextPath}/workstatus">작업 현황 조회</a>
 				</div>
 			</div>
 
@@ -112,9 +113,9 @@
 				<div class="menu-items open">
 					<a href="${pageContext.request.contextPath}/master-item">품목 관리</a> 
 					<a href="${pageContext.request.contextPath}/process/list">공정 관리</a> 
-					<a href="#">라우팅 관리</a> 
+					<a href="${pageContext.request.contextPath}/routing/list">라우팅 관리</a> 
 					<a href="${pageContext.request.contextPath}/BOM-mgmt">BOM 관리</a> 
-					<a href="#">불량 관리</a> 
+					<a href="${pageContext.request.contextPath}/defect-mgmt">불량 관리</a> 
 					<a href="#">설비 관리</a> 
 					<a href="${pageContext.request.contextPath}/member/list">직원 관리</a>
 				</div>

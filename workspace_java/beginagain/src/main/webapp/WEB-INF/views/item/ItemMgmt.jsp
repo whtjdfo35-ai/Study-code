@@ -10,14 +10,19 @@
 
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common.css" />
 			<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/table.css" />
-			
+			<style>
+				.taSelect[name="dateType"] {
+					min-width: 100px;
+				}
+			</style>
+
 		</head>
 
 		<body>
 
 			<div class="taPageActions">
 				<button type="button" class="taBtn taBtnPrimary" onclick="openModal()">등록</button>
-				<button type="button" class="taBtn taBtnOutline">삭제</button>
+				<button type="button" class="taBtn taBtnDanger" onclick="deleteSelected()">삭제</button>
 			</div>
 
 
@@ -77,6 +82,7 @@
 
 						<thead>
 							<tr>
+								<th class="taTableHeadCell"><input type="checkbox" id="checkAll"></th>
 								<th class="taTableHeadCell">품목 ID</th>
 								<th class="taTableHeadCell">품목 코드</th>
 								<th class="taTableHeadCell">품목명</th>
@@ -86,14 +92,15 @@
 								<th class="taTableHeadCell">공급업체</th>
 								<th class="taTableHeadCell">안전재고</th>
 								<th class="taTableHeadCell">사용 여부</th>
-								<th class="taTableHeadCell">등록일</th>
-								<th class="taTableHeadCell">수정일</th>
+								<th class="taTableHeadCell">수정</th>
 							</tr>
 						</thead>
 
 						<tbody>
 							<c:forEach var="item" items="${itemList}">
 								<tr class="taTableBodyRow">
+									<td class="taTableBodyCell"><input type="checkbox" class="row-check" name="item_id"
+											value="${item.item_id}"></td>
 									<td class="taTableBodyCell">${item.item_id}</td>
 									<td class="taTableBodyCell">${item.item_code}</td>
 									<td class="taTableBodyCell">${item.item_name}</td>
@@ -103,14 +110,18 @@
 									<td class="taTableBodyCell">${item.supplier_name}</td>
 									<td class="taTableBodyCell">${item.safety_stock}</td>
 									<td class="taTableBodyCell">${item.use_yn}</td>
-									<td class="taTableBodyCell">${item.created_at}</td>
-									<td class="taTableBodyCell">${item.updated_at}</td>
+									<td class="taTableBodyCell">
+										<button type="button" class="taBtn"
+											onclick="editItem('${item.item_id}','${item.item_code}','${item.item_name}','${item.item_type}','${item.unit}','${item.spec}','${item.supplier_name}','${item.safety_stock}','${item.use_yn}')">
+											수정
+										</button>
+									</td>
 								</tr>
 							</c:forEach>
 
 							<c:if test="${empty itemList}">
 								<tr>
-									<td colspan="10" style="text-align:center;">
+									<td colspan="11" style="text-align:center;">
 										조회된 데이터가 없습니다.
 									</td>
 								</tr>
@@ -127,7 +138,7 @@
 					<div class="modal-title">품목 등록</div>
 
 					<form method="post" action="${pageContext.request.contextPath}/master-item" class="form-row">
-
+						<input type="hidden" name="item_id" id="item_id">
 						<input type="text" name="item_code" placeholder="품목 코드">
 						<input type="text" name="item_name" placeholder="품목명">
 						<input type="text" name="item_type" placeholder="품목 구분">
@@ -139,14 +150,74 @@
 
 						<div style="display:flex; gap:10px; margin-top:10px;">
 							<button type="submit" class="taBtn taBtnPrimary">등록</button>
-							<button type="button" class="taBtn taBtnOutline" onclick="openModal()">취소</button>
+							<button type="button" class="taBtn" onclick="openModal()">취소</button>
 						</div>
 
 					</form>
 				</div>
 			</div>
-			
-			<script src="${pageContext.request.contextPath}/assets/js/itemMgmt.js"></script>
+
+			<script>
+				function openModal() {
+					document.querySelector(".modal").classList.toggle("open")
+				}
+
+				function deleteSelected() {
+
+					const checked = document.querySelectorAll("input[name='item_id']:checked");
+
+					if (checked.length === 0) {
+						alert("삭제할 항목을 선택하세요.");
+						return;
+					}
+
+					const form = document.createElement("form");
+					form.method = "post";
+					form.action = "${pageContext.request.contextPath}/item-del";
+
+					checked.forEach(c => {
+						const input = document.createElement("input");
+						input.type = "hidden";
+						input.name = "item_id";
+						input.value = c.value;
+						form.appendChild(input);
+					});
+
+					document.body.appendChild(form);
+					form.submit();
+				}
+
+				function editItem(item_id, item_code, item_name, item_type, unit, spec, supplier_name, safety_stock, use_yn) {
+					document.querySelector("#item_id").value = item_id;
+					document.querySelector("input[name='item_code']").value = item_code;
+					document.querySelector("input[name='item_name']").value = item_name;
+					document.querySelector("input[name='item_type']").value = item_type;
+					document.querySelector("input[name='unit']").value = unit;
+					document.querySelector("input[name='spec']").value = spec;
+					document.querySelector("input[name='supplier_name']").value = supplier_name;
+					document.querySelector("input[name='safety_stock']").value = safety_stock;
+					document.querySelector("input[name='use_yn']").value = use_yn;
+					openModal();
+				}
+
+				document.addEventListener("DOMContentLoaded", function () {
+					const checkAll = document.getElementById("checkAll");
+					const rowChecks = document.querySelectorAll(".row-check");
+
+					checkAll.addEventListener("change", function () {
+						rowChecks.forEach(cb => {
+							cb.checked = checkAll.checked;
+						})
+					})
+
+					rowChecks.forEach(cb => {
+						cb.addEventListener("change", function () {
+							const allChecked = Array.from(rowChecks).every(c => c.checked);
+							checkAll.checked = allChecked;
+						})
+					})
+				})
+			</script>
 
 		</body>
 

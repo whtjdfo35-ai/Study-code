@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import MasterDataMgmt.DefectManagement.DefectMgmtService;
+
 @WebServlet("/master-item")
 public class ItemMgmtCon extends HttpServlet {
 
@@ -53,7 +55,7 @@ public class ItemMgmtCon extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-		// 파라미터 받기
+		
 		String item_code = request.getParameter("item_code");
 		String item_name = request.getParameter("item_name");
 		String item_type = request.getParameter("item_type");
@@ -66,7 +68,7 @@ public class ItemMgmtCon extends HttpServlet {
 			safety_stock = Integer.parseInt(request.getParameter("safety_stock"));
 		}
 
-		// DTO 세팅
+		
 		ItemMgmtDTO dto = new ItemMgmtDTO();
 		dto.setItem_code(item_code);
 		dto.setItem_name(item_name);
@@ -77,11 +79,14 @@ public class ItemMgmtCon extends HttpServlet {
 		dto.setSafety_stock(safety_stock);
 		dto.setUse_yn(use_yn);
 
-		// DAO 호출
-		ItemMgmtDAO dao = new ItemMgmtDAO();
-		dao.insertItem(dto);
-
-		// 🔥 다시 목록으로 이동
+		String item_id = request.getParameter("item_id");
+		ItemMgmtService service = new ItemMgmtService();
+		if (item_id != null && !item_id.isEmpty()) {
+		    dto.setItem_id(Integer.parseInt(item_id));
+		    service.update(dto);
+		} else {
+		    service.insert(dto);
+		}
 		response.sendRedirect(request.getContextPath() + "/master-item");
 	}
 

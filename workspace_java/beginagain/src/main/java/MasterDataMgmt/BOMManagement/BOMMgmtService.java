@@ -2,28 +2,54 @@ package MasterDataMgmt.BOMManagement;
 
 import java.util.List;
 
+
 public class BOMMgmtService {
-	private BOMMgmtDAO dao = new BOMMgmtDAO();
+
+    private BOMMgmtDAO dao = new BOMMgmtDAO();
+    private BOMMgmtChangeDAO change = new BOMMgmtChangeDAO();
 
    
-    public List<BOMMgmtDTO> getBOMList(BOMMgmtSearchDTO searchDTO) {
-        return dao.getBOMList(searchDTO);
-    }
+    public void insert(BOMMgmtDTO dto) {
 
-    
-    public void addBOM(BOMMgmtDTO dto) {
-        
-        if (dto.getItem_code() == null || dto.getItem_code().isEmpty()) {
-            throw new IllegalArgumentException("품목 코드는 필수입니다.");
+        try {
+
+            int productItemId = change.findItemIdByCode(dto.getProduct_code());
+
+            if (productItemId == 0) {
+                throw new RuntimeException("완제품 코드가 존재하지 않습니다.");
+            }
+
+            dao.insertBOM(
+                productItemId,
+                dto.getUse_yn(),
+                dto.getRemark()
+            );
+
+            int bomId = dao.getCurrBomId();
+
+            if (bomId == 0) {
+                throw new RuntimeException("BOM 생성 실패");
+            }
+
+           
+            int materialItemId = change.findItemIdByCode(dto.getMaterial_code());
+
+            if (materialItemId == 0) {
+                throw new RuntimeException("원자재 코드가 존재하지 않습니다.");
+            }
+
+            dto.setBOM_id(bomId);
+            dto.setMaterial_id(materialItemId);
+
+            dao.insertBOMDetail(dto);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("BOM 등록 실패: " + e.getMessage());
         }
-
-        dao.insertBOM(dto);
     }
 
-    
-//    public void removeBOM(String[] ids) {
-//        if (ids != null && ids.length > 0) {
-//            dao.deleteItems(ids);
-//        }
-//    }
+    public List<BOMMgmtDTO> getBOMList(BOMMgmtSearchDTO dto) {
+        return dao.getBOMList(dto);
+    }
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/item-delete")
+@WebServlet("/item-del")
 public class ItemMgmtDeleteCon extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -20,13 +20,19 @@ public class ItemMgmtDeleteCon extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-        int id = Integer.parseInt(request.getParameter("id"));
+		String[] ids = request.getParameterValues("item_id");
 
-        ItemMgmtService service = new ItemMgmtService();
-        service.deleteItem(id);
+	    ItemMgmtService service = new ItemMgmtService();
 
-        // 삭제 후 리스트로 이동
-        response.sendRedirect("/listItem.do");
+	    int result = 0;
+
+	    if (ids != null) {
+	        for (String id : ids) {
+	            result += service.delete(Integer.parseInt(id));
+	        }
+	    }
+
+	    response.sendRedirect(request.getContextPath() + "/master-item");
 	}
 
 }

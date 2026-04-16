@@ -185,7 +185,7 @@ public class ItemMgmtDAO {
 		}
 	}
 
-	public int deleteItem(int id) {
+	public int delete(int id) {
 
 	    Connection conn = null;
 	    PreparedStatement ps = null;
@@ -196,12 +196,12 @@ public class ItemMgmtDAO {
 
 	        conn = dataFactory.getConnection();
 		
-	        String sql = "DELETE FROM ITEM WHERE ID = ?";
+	        String sql = "DELETE FROM ITEM WHERE ITEM_ID = ?";
         
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
 
-            return ps.executeUpdate(); // 1이면 성공
+            return ps.executeUpdate(); 
 
 	    } catch (Exception e) {
 			e.printStackTrace();
@@ -217,6 +217,44 @@ public class ItemMgmtDAO {
 			} catch (Exception e) {
 			}
 		}
+        return 0;
+	}
+
+	public int update(ItemMgmtDTO dto) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			Context ctx = new InitialContext();
+			DataSource dataFactory = (DataSource) ctx.lookup("java:comp/env/jdbc/oracle");
+			conn = dataFactory.getConnection();
+
+			String sql = "UPDATE ITEM SET "
+			        + "ITEM_CODE=?, ITEM_NAME=?, ITEM_TYPE=?, UNIT=?, SPEC=?, "
+			        + "SUPPLIER_NAME=?, SAFETY_STOCK=?, USE_YN=?, UPDATED_AT=SYSDATE "
+			        + "WHERE ITEM_ID=?";
+			
+			ps = conn.prepareStatement(sql);
+
+			ps.setString(1, dto.getItem_code());
+			ps.setString(2, dto.getItem_name());
+			ps.setString(3, dto.getItem_type());
+			ps.setString(4, dto.getUnit());
+			ps.setString(5, dto.getSpec());
+			ps.setString(6, dto.getSupplier_name());
+			ps.setInt(7, dto.getSafety_stock());
+			ps.setString(8, dto.getUse_yn());
+			ps.setInt(9, dto.getItem_id());
+
+			return ps.executeUpdate();
+
+		} catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+
         return 0;
 	}
 	

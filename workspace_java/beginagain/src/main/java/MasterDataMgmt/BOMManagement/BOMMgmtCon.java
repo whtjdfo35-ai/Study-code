@@ -16,47 +16,51 @@ import MasterDataMgmt.ItemMgmt.ItemMgmtService;
 
 @WebServlet("/BOM-mgmt")
 public class BOMMgmtCon extends HttpServlet {
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=utf-8");
-		
-		BOMMgmtSearchDTO searchDTO = new BOMMgmtSearchDTO();
 
-	    searchDTO.setStartDate(request.getParameter("startDate"));
-	    searchDTO.setEndDate(request.getParameter("endDate"));
-	    searchDTO.setField(request.getParameter("searchField"));
-	    searchDTO.setKeyword(request.getParameter("keyword"));
+    private BOMMgmtService service = new BOMMgmtService();
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	    BOMMgmtService service = new BOMMgmtService();
-	    List<BOMMgmtDTO> list = service.getBOMList(searchDTO);
+        request.setCharacterEncoding("utf-8");
+       
+        String productCode = request.getParameter("product_code");
 
-	    request.setAttribute("BOMList", list);
-	    request.getRequestDispatcher("/WEB-INF/views/item/BOMMgmt.jsp").forward(request, response);
-	}
+        BOMMgmtSearchDTO searchDTO = new BOMMgmtSearchDTO();
+        searchDTO.setProduct_code(productCode); 
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=utf-8");
-		
-//		BOMMgmtService service = new BOMMgmtService();
-//
-//	    // 삭제
-//	    String[] deleteIds = request.getParameterValues("deleteIds");
-//	    if (deleteIds != null) {
-//	        service.removeBOM(deleteIds);
-//	    } else {
-//	        // 등록
-//	        BOMMgmtDTO dto = new BOMMgmtDTO();
-//	        dto.setItem_code(request.getParameter("item_code"));
-//	        dto.setRemark(request.getParameter("remark"));
-//	        dto.setUse_yn(request.getParameter("use_yn"));
-//
-//	        service.addBOM(dto);
-//	    }
-//
-//	    response.sendRedirect(request.getContextPath() + "/BOM-mgmt");
-	}
+        List<BOMMgmtDTO> list = service.getBOMList(searchDTO);
 
+        request.setAttribute("BOMList", list);
+        request.setAttribute("contentPage", "/WEB-INF/views/item/BOMMgmt.jsp");
+
+        request.getRequestDispatcher("/WEB-INF/views/table.jsp")
+               .forward(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("utf-8");
+
+        String productCode = request.getParameter("product_code");
+        String materialCode = request.getParameter("material_code");
+        String unit = request.getParameter("unit");
+        String qty = request.getParameter("qty_required");
+        String remark = request.getParameter("remark");
+
+        BOMMgmtDTO dto = new BOMMgmtDTO();
+
+        dto.setProduct_code(productCode);
+        dto.setMaterial_code(materialCode);
+        dto.setUnit(unit);
+        dto.setQty_required(Double.parseDouble(qty));
+        dto.setRemark(remark);
+
+        service.insert(dto);
+
+        response.sendRedirect(request.getContextPath() + "/BOM-mgmt");
+    }
 }
+
+

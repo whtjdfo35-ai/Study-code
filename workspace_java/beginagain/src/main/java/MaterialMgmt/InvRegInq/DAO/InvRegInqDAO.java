@@ -215,4 +215,41 @@ public class InvRegInqDAO {
 
         return dto;
     }
+
+
+public int insertInvRegInq(InvRegInqDTO dto) {
+    Connection conn = null; PreparedStatement ps = null;
+    try {
+        Context ctx = new InitialContext(); DataSource dataFactory = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle"); conn = dataFactory.getConnection();
+        String sql = "INSERT INTO INVENTORY (INVENTORY_ID, ITEM_ID, QTY_ON_HAND, SAFETY_STOCK, REMARK, CREATED_AT, UPDATED_AT) VALUES ((SELECT NVL(MAX(INVENTORY_ID),0)+1 FROM INVENTORY), (SELECT ITEM_ID FROM ITEM WHERE ITEM_CODE = ?), ?, ?, ?, SYSDATE, SYSDATE)";
+        ps = conn.prepareStatement(sql); ps.setString(1, dto.getItemCode()); ps.setDouble(2, dto.getQtyOnHand()); ps.setDouble(3, dto.getSafetyStock()); ps.setString(4, dto.getRemark()); return ps.executeUpdate();
+    } catch (Exception e) { e.printStackTrace(); } finally { try { if (ps != null) ps.close(); } catch (Exception e) {} try { if (conn != null) conn.close(); } catch (Exception e) {} }
+    return 0;
+}
+
+public int deleteInvRegInq(int[] inventoryIds) {
+    Connection conn = null; PreparedStatement ps = null; int result = 0;
+    try {
+        if (inventoryIds == null || inventoryIds.length == 0) return 0;
+        Context ctx = new InitialContext(); DataSource dataFactory = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle"); conn = dataFactory.getConnection();
+        StringBuilder sql = new StringBuilder("DELETE FROM INVENTORY WHERE INVENTORY_ID IN (");
+        for (int i = 0; i < inventoryIds.length; i++) { if (i > 0) sql.append(","); sql.append("?"); }
+        sql.append(")");
+        ps = conn.prepareStatement(sql.toString()); for (int i = 0; i < inventoryIds.length; i++) ps.setInt(i + 1, inventoryIds[i]); result = ps.executeUpdate();
+    } catch (Exception e) { e.printStackTrace(); } finally { try { if (ps != null) ps.close(); } catch (Exception e) {} try { if (conn != null) conn.close(); } catch (Exception e) {} }
+    return result;
+}
+
+public int updateInvRegInq(InvRegInqDTO dto) {
+    Connection conn = null; PreparedStatement ps = null;
+    try {
+        Context ctx = new InitialContext(); DataSource dataFactory = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle"); conn = dataFactory.getConnection();
+        String sql = "UPDATE INVENTORY SET QTY_ON_HAND = ?, SAFETY_STOCK = ?, REMARK = ?, UPDATED_AT = SYSDATE WHERE INVENTORY_ID = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setDouble(1, dto.getQtyOnHand()); ps.setDouble(2, dto.getSafetyStock()); ps.setString(3, dto.getRemark()); ps.setInt(4, dto.getInventoryId());
+        return ps.executeUpdate();
+    } catch (Exception e) { e.printStackTrace(); } finally { try { if (ps != null) ps.close(); } catch (Exception e) {} try { if (conn != null) conn.close(); } catch (Exception e) {} }
+    return 0;
+}
+
 }

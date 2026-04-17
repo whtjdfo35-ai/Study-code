@@ -7,16 +7,37 @@ import java.sql.Timestamp;
  */
 public class SuggestionDTO {
 
+    /** 건의사항 번호 */
     private long suggestionId;
+
+    /** 제목 */
     private String title;
+
+    /** 내용 */
     private String content;
+
+    /** 작성자 사번 */
     private long writerEmpId;
+
+    /** 작성자명 */
     private String writerName;
+
+    /** 부서코드 */
     private String deptCode;
+
+    /** 상태 */
     private String status;
+
+    /** 조회수 */
     private int viewCount;
+
+    /** 비고 */
     private String remark;
+
+    /** 작성일 */
     private Timestamp createdAt;
+
+    /** 수정일 */
     private Timestamp updatedAt;
 
     public long getSuggestionId() {

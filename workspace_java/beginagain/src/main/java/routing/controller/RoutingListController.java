@@ -9,8 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import equipment.dto.EquipmentDTO;
+import equipment.service.EquipmentService;
 import item.dto.ItemDTO;
 import item.service.ItemService;
+import process.dto.ProcessDTO;
+import process.service.ProcessService;
 import routing.dto.RoutingDTO;
 import routing.service.RoutingService;
 
@@ -20,13 +24,20 @@ public class RoutingListController extends HttpServlet {
 
     private ItemService itemService = new ItemService();
     private RoutingService routingService = new RoutingService();
+    private ProcessService processService = new ProcessService();
+    private EquipmentService equipmentService = new EquipmentService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         List<ItemDTO> itemList = itemService.getItemList();
+        List<ProcessDTO> processList = processService.getList();
+        List<EquipmentDTO> equipmentList = equipmentService.getEquipmentList();
+
         request.setAttribute("itemList", itemList);
+        request.setAttribute("processList", processList);
+        request.setAttribute("equipmentList", equipmentList);
 
         String itemIdParam = request.getParameter("itemId");
         Integer selectedItemId = null;
@@ -43,7 +54,7 @@ public class RoutingListController extends HttpServlet {
         }
 
         request.setAttribute("pageTitle", "라우팅관리");
-        request.setAttribute("pageSubTitle", "품목별 라우팅 조회");
+        request.setAttribute("pageSubTitle", "라우팅 등록, 조회");
         request.setAttribute("contentPage", "/WEB-INF/views/routing/routingList.jsp");
         request.getRequestDispatcher("/WEB-INF/views/table.jsp").forward(request, response);
     }

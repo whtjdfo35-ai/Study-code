@@ -1,117 +1,139 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<div class="taPageActions">
+	<button type="button" class="taBtn taBtnPrimary"
+		data-modal-target="registerModal">등록</button>
+	<button type="submit" form="deleteForm" class="taBtn taBtnOutline"
+		onclick="return confirm('선택한 공정을 삭제하시겠습니까?');">선택 삭제</button>
+</div>
+<!-- 페이징기능을 위해 주석처리하고 하단 코딩 추가 /령 -->
+<!-- <form class="taLocalSearchForm" data-table-id="processTable"> -->
 
-<c:set var="pageTitle" value="공정관리" />
-<c:set var="pageSubTitle" value="공정 등록 / 조회 / 수정 / 삭제" />
+<form id="paSearchForm" method="get"
+	action="${pageContext.request.contextPath}/process/list">
+	<input type="hidden" name="page" id="paPage" value="${paCurrentPage}">
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>공정관리 목록</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/table.css" />
-<script src="${pageContext.request.contextPath}/assets/js/layout.js"></script>
-</head>
-<body>
+	<div class="taToolbarRow">
 
-	<div class="app">
-		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+		<!-- 1) 첫 검색창 -->
+		<div class="taToolbarField taToolbarSpan3">
+			<select
+				class="taSelect taAutoSelectColor ${empty searchType or searchType eq 'all' ? 'taSelectPlaceholder' : ''}"
+				name="searchType">
+				<option value="" disabled hidden
+					<c:if test="${empty searchType or searchType eq 'all'}">selected</c:if>>
+					전체 / 공정코드 ...</option>
+				<option value="all"
+					<c:if test="${searchType eq 'all'}">selected</c:if>>전체</option>
+				<option value="processCode"
+					<c:if test="${searchType eq 'processCode'}">selected</c:if>>
+					공정코드</option>
+				<option value="processName"
+					<c:if test="${searchType eq 'processName'}">selected</c:if>>
+					공정명</option>
+			</select>
+		</div>
 
-		<div class="main">
-			<jsp:include page="/WEB-INF/views/common/topbar.jsp" />
+		<!-- 2) 기존 두 번째 검색창 -->
+		<div class="taToolbarField taToolbarFieldGrow taToolbarSpan9">
+			<div class="taSearchBox">
+				<input type="text" class="taSearchInput" name="keyword"
+					value="${keyword}" placeholder="검색키워드">
 
-			<section class="page-wrap">
-				<div class="page-card">
-					<div class="page-actions">
-                    <button type="button" class="btn" onclick="openRegisterModal()">등록</button>
-						<button type="submit" form="deleteForm" class="btn"
-							onclick="return confirm('선택한 공정을 삭제하시겠습니까?');">선택 삭제</button>
-						<a href="${pageContext.request.contextPath}/main" class="btn">메인</a>
-					</div>
+				<button type="submit" class="taSearchBtn" aria-label="검색"
+					onclick="document.getElementById('paPage').value=1;">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="11" cy="11" r="7"></circle>
+						<path d="M20 20L16.65 16.65"></path>
+					</svg>
+				</button>
 
-					<form id="deleteForm"
-						action="${pageContext.request.contextPath}/process/delete"
-						method="post">
-						<table>
-							<thead>
-								<tr>
-									<th><input type="checkbox" id="checkAll"></th>
-									<th>ID</th>
-									<th>코드</th>
-									<th>이름</th>
-									<th>상세</th>
+				<button type="button" class="taBtn taBtnOutline taSearchReset"
+					onclick="location.href='${pageContext.request.contextPath}/process/list'">
+					초기화</button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+<form id="deleteForm"
+	action="${pageContext.request.contextPath}/process/delete"
+	method="post">
+	<!-- 	페이징을 위해 아이디 추가함 id="paTableBox" / 령 -->
+	<div class="taTableShell" id="paTableBox">
+		<div class="taTableScroll">
+			<table class="taMesTable" id="processTable">
+				<thead>
+					<tr>
+						<th class="taTableHeadCell taCheckCell"><input
+							type="checkbox" id="checkAll" class="taCheckInput"></th>
+						<th class="taTableHeadCell taColFit">ID</th>
+						<th class="taTableHeadCell taColFit">코드</th>
+						<th class="taTableHeadCell taColGrow">이름</th>
+						<th class="taTableHeadCell taColAction taLastCol">상세</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:choose>
+						<c:when test="${not empty list}">
+							<c:forEach var="p" items="${list}">
+								<tr class="taTableBodyRow">
+									<td class="taTableBodyCell taCheckCell"><input
+										type="checkbox" name="processId" value="${p.processId}"
+										class="taCheckInput"></td>
+									<td class="taTableBodyCell taColFit">${p.processId}</td>
+									<td class="taTableBodyCell taColFit"
+										data-search-key="processCode">${p.processCode}</td>
+									<td class="taTableBodyCell taColGrow"
+										data-search-key="processName">${p.processName}</td>
+									<td class="taTableBodyCell taColAction taLastCol"><a
+										class="taLinkAnchor"
+										href="${pageContext.request.contextPath}/process/detail?processId=${p.processId}">상세보기</a></td>
 								</tr>
-							</thead>
-							<tbody>
-								<c:choose>
-									<c:when test="${not empty list}">
-										<c:forEach var="p" items="${list}">
-											<tr>
-												<td><input type="checkbox" name="processId"
-													value="${p.processId}"></td>
-												<td>${p.processId}</td>
-												<td>${p.processCode}</td>
-												<td>${p.processName}</td>
-												<td><a class="btn"
-													href="${pageContext.request.contextPath}/process/detail?processId=${p.processId}">상세</a></td>
-											</tr>
-										</c:forEach>
-									</c:when>
-									<c:otherwise>
-										<tr>
-											<td colspan="5">데이터 없음</td>
-										</tr>
-									</c:otherwise>
-								</c:choose>
-							</tbody>
-						</table>
-					</form>
-				</div>
-			</section>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr class="taTableBodyRow">
+								<td class="taTableBodyCell taLastCol" colspan="5"
+									style="text-align: center;">데이터가 없습니다.</td>
+							</tr>
+						</c:otherwise>
+					</c:choose>
+				</tbody>
+			</table>
 		</div>
 	</div>
-
-	<script>
-		document.getElementById("checkAll").addEventListener(
-				"change",
-				function() {
-					const checks = document
-							.querySelectorAll("input[name='processId']");
-					for (let i = 0; i < checks.length; i++) {
-						checks[i].checked = this.checked;
-					}
-				});
-	</script>
-
-
-<div class="modal" id="registerModal">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 class="modal-title">공정 등록</h3>
-            <button type="button" class="modal-close" onclick="closeRegisterModal()">&times;</button>
-        </div>
-        <form action="${pageContext.request.contextPath}/process/register" method="post">
-            <div class="modal-form-grid">
-                <div class="form-row"><label>공정코드</label><input type="text" name="processCode" required></div>
-<div class="form-row"><label>공정명</label><input type="text" name="processName" required></div>
-<div class="form-row full"><label>설명</label><textarea name="description"></textarea></div>
-<div class="form-row full"><label>비고</label><textarea name="remark"></textarea></div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn" onclick="closeRegisterModal()">취소</button>
-                <button type="submit" class="btn">등록</button>
-            </div>
-        </form>
-    </div>
+</form>
+<div class="taModal" id="registerModal" hidden aria-hidden="true">
+	<div class="taModalDialog">
+		<div class="taModalHeader">
+			<h3 class="taModalTitle">공정 등록</h3>
+			<button type="button" class="taModalClose">&times;</button>
+		</div>
+		<form action="${pageContext.request.contextPath}/process/register"
+			method="post">
+			<div class="taModalBody taModalGrid">
+				<div class="form-row">
+					<label>공정코드</label><input type="text" name="processCode" required>
+				</div>
+				<div class="form-row">
+					<label>공정명</label><input type="text" name="processName" required>
+				</div>
+				<div class="form-row full">
+					<label>설명</label>
+					<textarea name="description"></textarea>
+				</div>
+				<div class="form-row full">
+					<label>비고</label>
+					<textarea name="remark"></textarea>
+				</div>
+			</div>
+			<div class="taModalFooter">
+				<button type="button" class="taBtn taBtnOutline taModalClose">취소</button>
+				<button type="submit" class="taBtn taBtnPrimary">등록</button>
+			</div>
+		</form>
+	</div>
 </div>
-<script>
-function openRegisterModal() { document.getElementById("registerModal").classList.add("open"); }
-function closeRegisterModal() { document.getElementById("registerModal").classList.remove("open"); }
-window.addEventListener("click", function(e) { const m = document.getElementById("registerModal"); if (e.target === m) closeRegisterModal(); });
-</script>
-
-</body>
-</html>

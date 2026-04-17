@@ -1,140 +1,147 @@
 package MaterialMgmt.InvRegInq.Controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import MaterialMgmt.InvRegInq.DTO.InvRegInqDTO;
 import MaterialMgmt.InvRegInq.Service.InvRegInqService;
 
-/*
- * 재고 등록 / 조회 Servlet
- * 
- * 전송 방식
- * - 전부 form method="post"
- * - doPost()만 사용
- * 
- * cmd 값
- * - list   : 목록 조회
- * - detail : 상세 조회
- */
 @WebServlet("/invRegInq")
 public class InvRegInqServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // 첫 진입 화면
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8;");
-
-        request.setAttribute("pageId", "page-materials-inventory");
-        request.setAttribute("pageTitle", "재고 등록 / 조회");
-        request.setAttribute("pageSubTitle", "현재 재고 현황을 조회하는 화면");
-
-        request.setAttribute("contentPage", "/WEB-INF/views/InvRegInq.jsp");
-        request.getRequestDispatcher("/WEB-INF/views/table.jsp").forward(request, response);
+        String inventoryId = request.getParameter("inventoryId");
+        if (inventoryId != null && !"".equals(inventoryId)) {
+            detail(request, response);
+            return;
+        }
+        forwardList(request, response, new InvRegInqDTO());
     }
 
-    // POST 처리
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8;");
-
         String cmd = request.getParameter("cmd");
-        System.out.println("InvRegInqServlet cmd : " + cmd);
-
-        if (cmd == null || "".equals(cmd)) {
-            cmd = "list";
-        }
-
+        if (cmd == null || "".equals(cmd)) cmd = "list";
         try {
-            if ("list".equals(cmd)) {
-                list(request, response);
-            } else if ("detail".equals(cmd)) {
-                detail(request, response);
-            } else {
-                list(request, response);
-            }
+            if ("register".equals(cmd)) register(request, response);
+            else if ("update".equals(cmd)) update(request, response);
+            else if ("delete".equals(cmd)) delete(request, response);
+            else if ("detail".equals(cmd)) detail(request, response);
+            else list(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ServletException("InvRegInqServlet 처리 중 오류 발생", e);
         }
     }
 
-    // 재고 목록 조회
-    private void list(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InvRegInqDTO searchDTO = new InvRegInqDTO();
+        searchDTO.setSearchType(request.getParameter("searchType"));
+        searchDTO.setKeyword(request.getParameter("keyword"));
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
-        String searchType = request.getParameter("searchType");
-        String keyword = request.getParameter("keyword");
+        if (startDateStr != null && !"".equals(startDateStr)) searchDTO.setStartDate(Date.valueOf(startDateStr));
+        if (endDateStr != null && !"".equals(endDateStr)) searchDTO.setEndDate(Date.valueOf(endDateStr));
+        forwardList(request, response, searchDTO);
+    }
 
-        System.out.println("startDate : " + startDateStr);
-        System.out.println("endDate   : " + endDateStr);
-        System.out.println("searchType: " + searchType);
-        System.out.println("keyword   : " + keyword);
+    private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InvRegInqDTO dto = new InvRegInqDTO();
+        dto.setItemCode(request.getParameter("itemCode"));
+        dto.setQtyOnHand(parseDouble(request.getParameter("qtyOnHand")));
+        dto.setSafetyStock(parseDouble(request.getParameter("safetyStock")));
+        dto.setRemark(request.getParameter("remark"));
+        new InvRegInqService().register(dto);
+        response.sendRedirect(request.getContextPath() + "/invRegInq");
+    }
 
-        InvRegInqDTO searchDTO = new InvRegInqDTO();
-        searchDTO.setSearchType(searchType);
-        searchDTO.setKeyword(keyword);
 
-        if (startDateStr != null && !"".equals(startDateStr)) {
-            searchDTO.setStartDate(java.sql.Date.valueOf(startDateStr));
-        }
+    private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        InvRegInqDTO dto = new InvRegInqDTO();
+        dto.setInventoryId(parseInt(request.getParameter("inventoryId"), 0));
+        dto.setQtyOnHand(parseDouble(request.getParameter("qtyOnHand")));
+        dto.setSafetyStock(parseDouble(request.getParameter("safetyStock")));
+        dto.setRemark(request.getParameter("remark"));
+        new InvRegInqService().update(dto);
+        response.sendRedirect(request.getContextPath() + "/invRegInq?inventoryId=" + dto.getInventoryId());
+    }
 
-        if (endDateStr != null && !"".equals(endDateStr)) {
-            searchDTO.setEndDate(java.sql.Date.valueOf(endDateStr));
-        }
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        new InvRegInqService().delete(parseIntArray(request.getParameterValues("inventoryIds")));
+        response.sendRedirect(request.getContextPath() + "/invRegInq");
+    }
 
-        InvRegInqService service = new InvRegInqService();
-        List<InvRegInqDTO> list = service.getInvRegInqList(searchDTO);
-
-        request.setAttribute("invRegInqList", list);
-        request.setAttribute("invRegInqSearchDTO", searchDTO);
-
-        request.setAttribute("pageId", "page-materials-inventory");
-        request.setAttribute("pageTitle", "재고 등록 / 조회");
-        request.setAttribute("pageSubTitle", "현재 재고 현황을 조회하는 화면");
-        request.setAttribute("contentPage", "/WEB-INF/views/InvRegInq.jsp");
-
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int inventoryId = Integer.parseInt(request.getParameter("inventoryId"));
+        InvRegInqDTO dto = new InvRegInqService().getInvRegInqDetail(inventoryId);
+        request.setAttribute("invRegInqDTO", dto);
+        request.setAttribute("pageId", "page-materials-inventory-detail");
+        request.setAttribute("pageTitle", "재고 상세");
+        request.setAttribute("pageSubTitle", "재고 상세 정보 화면");
+        request.setAttribute("contentPage", "/WEB-INF/views/material/inventoryDetail.jsp");
         request.getRequestDispatcher("/WEB-INF/views/table.jsp").forward(request, response);
     }
-    
-    // 재고 상세 조회
-    private void detail(HttpServletRequest request, HttpServletResponse response)
+
+    private void forwardList(HttpServletRequest request, HttpServletResponse response, InvRegInqDTO searchDTO)
             throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html; charset=utf-8;");
 
-        String inventoryIdStr = request.getParameter("inventoryId");
-        System.out.println("inventoryId : [" + inventoryIdStr + "]");
+        List<InvRegInqDTO> fullList = new InvRegInqService().getInvRegInqList(searchDTO);
+        int paCurrentPage = parseInt(request.getParameter("page"), 1);
+        int paPageSize = 10;
+        int paBlockSize = 5;
+        int paTotalCount = fullList.size();
+        int paTotalPage = (int) Math.ceil((double) paTotalCount / paPageSize);
+        if (paTotalPage < 1) paTotalPage = 1;
+        if (paCurrentPage < 1) paCurrentPage = 1;
+        if (paCurrentPage > paTotalPage) paCurrentPage = paTotalPage;
+        int fromIndex = (paCurrentPage - 1) * paPageSize;
+        int toIndex = Math.min(fromIndex + paPageSize, paTotalCount);
+        List<InvRegInqDTO> pageList = fullList.subList(fromIndex, toIndex);
+        int paStartPage = ((paCurrentPage - 1) / paBlockSize) * paBlockSize + 1;
+        int paEndPage = Math.min(paStartPage + paBlockSize - 1, paTotalPage);
 
-        if (inventoryIdStr == null || "".equals(inventoryIdStr.trim())) {
-            throw new ServletException("상세조회용 inventoryId 값이 비어 있습니다.");
-        }
-
-        int inventoryId = Integer.parseInt(inventoryIdStr);
-
-        InvRegInqService service = new InvRegInqService();
-        InvRegInqDTO dto = service.getInvRegInqDetail(inventoryId);
-
-        request.setAttribute("invRegInqDTO", dto);
-
+        request.setAttribute("invRegInqList", pageList);
+        request.setAttribute("invRegInqSearchDTO", searchDTO);
+        request.setAttribute("paCurrentPage", paCurrentPage);
+        request.setAttribute("paPageSize", paPageSize);
+        request.setAttribute("paBlockSize", paBlockSize);
+        request.setAttribute("paTotalCount", paTotalCount);
+        request.setAttribute("paTotalPage", paTotalPage);
+        request.setAttribute("paStartPage", paStartPage);
+        request.setAttribute("paEndPage", paEndPage);
         request.setAttribute("pageId", "page-materials-inventory");
         request.setAttribute("pageTitle", "재고 등록 / 조회");
-        request.setAttribute("pageSubTitle", "현재 재고 현황을 조회하는 화면");
-
+        request.setAttribute("pageSubTitle", "재고 현황 등록, 조회");
         request.setAttribute("contentPage", "/WEB-INF/views/InvRegInq.jsp");
         request.getRequestDispatcher("/WEB-INF/views/table.jsp").forward(request, response);
+    }
+
+    private int[] parseIntArray(String[] values) {
+        if (values == null) return new int[0];
+        int[] tmp = new int[values.length];
+        int idx = 0;
+        for (String v : values) if (v != null && !"".equals(v)) tmp[idx++] = Integer.parseInt(v);
+        int[] r = new int[idx];
+        System.arraycopy(tmp, 0, r, 0, idx);
+        return r;
+    }
+
+    private double parseDouble(String value) {
+        return (value == null || "".equals(value)) ? 0 : Double.parseDouble(value);
+    }
+
+    private int parseInt(String value, int defaultValue) {
+        try { return Integer.parseInt(value); } catch (Exception e) { return defaultValue; }
     }
 }

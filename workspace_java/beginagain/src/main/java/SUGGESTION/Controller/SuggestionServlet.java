@@ -3,6 +3,7 @@ package SUGGESTION.Controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,145 +11,312 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ANSWER.DTO.AnswerDTO;
+import ANSWER.Service.AnswerService;
 import SUGGESTION.DTO.SuggestionDTO;
 import SUGGESTION.Service.SuggestionService;
+import member.dto.MemberDTO;
 
-/**
- * 건의사항 서블릿
- * - 목록 JSP 1개만 사용
- * - 등록/상세/수정 모두 suggestionList.jsp에서 모달로 처리
- */
 @WebServlet("/suggestion/*")
 public class SuggestionServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private final SuggestionService suggestionService = new SuggestionService();
+    private final SuggestionService suSuggestionService = new SuggestionService();
+    private final AnswerService anAnswerService = new AnswerService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
+        String suPath = request.getPathInfo();
 
-        String path = request.getPathInfo();
+        try {
+            if (suPath == null || "/".equals(suPath) || "/list".equals(suPath)) {
+                list(request, response);
+                return;
+            }
 
-        if (path == null || "/list".equals(path)) {
-            list(request, response);
-        } else {
             response.sendRedirect(request.getContextPath() + "/suggestion/list");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("SuggestionServlet doGet 오류", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
+        String suPath = request.getPathInfo();
 
-        String path = request.getPathInfo();
+        try {
+            if ("/insert".equals(suPath)) {
+                insert(request, response);
+                return;
+            }
 
-        if ("/insert".equals(path)) {
-            insert(request, response);
-        } else if ("/update".equals(path)) {
-            update(request, response);
-        } else if ("/delete".equals(path)) {
-            delete(request, response);
-        } else {
+            if ("/update".equals(suPath)) {
+                update(request, response);
+                return;
+            }
+
+            if ("/delete".equals(suPath)) {
+                delete(request, response);
+                return;
+            }
+
+            if ("/hide".equals(suPath)) {
+                hide(request, response);
+                return;
+            }
+
+            if ("/answerInsert".equals(suPath)) {
+                answerInsert(request, response);
+                return;
+            }
+
+            if ("/answerUpdate".equals(suPath)) {
+                answerUpdate(request, response);
+                return;
+            }
+
+            if ("/answerDelete".equals(suPath)) {
+                answerDelete(request, response);
+                return;
+            }
+
+            if ("/answerHide".equals(suPath)) {
+                answerHide(request, response);
+                return;
+            }
+
             response.sendRedirect(request.getContextPath() + "/suggestion/list");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("SuggestionServlet doPost 오류", e);
         }
     }
 
-    /**
-     * 목록 + 모달 분기
-     * mode
-     * - "" or null : 일반 목록
-     * - write      : 등록 모달 열기
-     * - detail     : 상세 모달 열기
-     * - edit       : 수정 모달 열기
-     */
-    private void list(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
 
-        String keyword = request.getParameter("keyword");
-        String status = request.getParameter("status");
-        String deptCode = request.getParameter("deptCode");
-        String mode = request.getParameter("mode");
-        String idParam = request.getParameter("id");
+    private void list(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String suMode = getString(request.getParameter("mode"), "list");
+        String suKeyword = getString(request.getParameter("keyword"), "");
+        String suStatus = getString(request.getParameter("status"), "");
+        String suDeptCode = getString(request.getParameter("deptCode"), "");
+        String suModal = getString(request.getParameter("modal"), "");
 
-        List<SuggestionDTO> suggestionList =
-                suggestionService.getSuggestionList(keyword, status, deptCode);
+        int suPage = parseInt(request.getParameter("page"), 1);
+        int suSize = parseInt(request.getParameter("size"), 10);
 
-        SuggestionDTO selectedSuggestion = null;
-
-        if (idParam != null && !idParam.trim().isEmpty()) {
-            long suggestionId = Long.parseLong(idParam);
-
-            // 상세만 조회수 증가 / 수정모드는 조회수 증가 안 함
-            boolean increaseViewCount = "detail".equals(mode);
-            selectedSuggestion = suggestionService.getSuggestionDetail(suggestionId, increaseViewCount);
+        if (suPage < 1) {
+            suPage = 1;
+        }
+        if (suSize < 1) {
+            suSize = 10;
         }
 
-        request.setAttribute("suggestionList", suggestionList);
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("status", status);
-        request.setAttribute("deptCode", deptCode);
-        request.setAttribute("mode", mode);
-        request.setAttribute("selectedSuggestion", selectedSuggestion);
+        int suTotalCount = suSuggestionService.getSuggestionCount(suKeyword, suStatus, suDeptCode);
+        int suTotalPage = (int) Math.ceil((double) suTotalCount / suSize);
 
-        request.getRequestDispatcher("/WEB-INF/views/suggestion/suggestionList.jsp")
-               .forward(request, response);
-    }
+        if (suTotalPage < 1) {
+            suTotalPage = 1;
+        }
 
-    /**
-     * 등록
-     */
-    private void insert(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+        if (suPage > suTotalPage) {
+            suPage = suTotalPage;
+        }
 
-        SuggestionDTO dto = new SuggestionDTO();
-        dto.setTitle(request.getParameter("title"));
-        dto.setContent(request.getParameter("content"));
-        dto.setStatus("접수");
-        dto.setRemark(request.getParameter("remark"));
+        int suStartRow = (suPage - 1) * suSize + 1;
+        int suEndRow = suPage * suSize;
 
-        long writerEmpId = 1L; // 테스트용 기본값
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Object loginEmpId = session.getAttribute("loginEmpId");
-            if (loginEmpId instanceof Number) {
-                writerEmpId = ((Number) loginEmpId).longValue();
+        List<SuggestionDTO> suSuggestionList =
+                suSuggestionService.getSuggestionList(suStartRow, suEndRow, suKeyword, suStatus, suDeptCode);
+
+        int suPageBlock = 5;
+        int suStartPage = ((suPage - 1) / suPageBlock) * suPageBlock + 1;
+        int suEndPage = suStartPage + suPageBlock - 1;
+
+        if (suEndPage > suTotalPage) {
+            suEndPage = suTotalPage;
+        }
+
+        request.setAttribute("suggestionList", suSuggestionList);
+        request.setAttribute("keyword", suKeyword);
+        request.setAttribute("status", suStatus);
+        request.setAttribute("deptCode", suDeptCode);
+        request.setAttribute("mode", suMode);
+        request.setAttribute("modal", suModal);
+        request.setAttribute("page", suPage);
+        request.setAttribute("size", suSize);
+        request.setAttribute("totalCount", suTotalCount);
+        request.setAttribute("totalPage", suTotalPage);
+        request.setAttribute("startPage", suStartPage);
+        request.setAttribute("endPage", suEndPage);
+
+        /*
+         * 상세 모드일 때 게시글 / 답글 다시 조회
+         */
+        if ("detail".equals(suMode)) {
+            long suSuggestionId = parseLong(request.getParameter("id"), 0L);
+
+            if (suSuggestionId > 0L) {
+                SuggestionDTO suSelectedSuggestion =
+                        suSuggestionService.getSuggestionDetail(suSuggestionId, true);
+
+                AnswerDTO anSelectedAnswer =
+                        anAnswerService.getAnswerBySuggestionId(suSuggestionId);
+
+                List<AnswerDTO> anAnswerList = null;
+                try {
+                    anAnswerList = anAnswerService.getAnswerListBySuggestionId(suSuggestionId);
+                } catch (Exception e) {
+                    anAnswerList = null;
+                }
+
+                request.setAttribute("selectedSuggestion", suSelectedSuggestion);
+                request.setAttribute("selectedAnswer", anSelectedAnswer);
+                request.setAttribute("answerList", anAnswerList);
             }
         }
-        dto.setWriterEmpId(writerEmpId);
 
-        suggestionService.addSuggestion(dto);
+        request.setAttribute("isAdmin", true);
+        request.setAttribute("canEditSuggestion", true);
+        request.setAttribute("canDeleteSuggestion", true);
+        request.setAttribute("canWriteAnswer", true);
+        request.setAttribute("canEditAnswer", true);
+        request.setAttribute("canDeleteAnswer", true);
+
+        request.setAttribute("pageTitle", "건의사항 게시판");
+        request.setAttribute("contentPage", "/WEB-INF/views/Suggestion.jsp");
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/table.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+
+    private void insert(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        SuggestionDTO suDto = new SuggestionDTO();
+        suDto.setTitle(getString(request.getParameter("title"), ""));
+        suDto.setContent(getString(request.getParameter("content"), ""));
+        suDto.setRemark(getString(request.getParameter("remark"), ""));
+        suDto.setStatus("접수");
+        suDto.setWriterEmpId(resolveWriterEmpId(request.getSession(false)));
+        suSuggestionService.insertSuggestion(suDto);
         response.sendRedirect(request.getContextPath() + "/suggestion/list");
     }
 
-    /**
-     * 수정
-     */
-    private void update(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    private void update(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
 
-        SuggestionDTO dto = new SuggestionDTO();
-        dto.setSuggestionId(Long.parseLong(request.getParameter("suggestionId")));
-        dto.setTitle(request.getParameter("title"));
-        dto.setContent(request.getParameter("content"));
-        dto.setStatus(request.getParameter("status"));
-        dto.setRemark(request.getParameter("remark"));
+        SuggestionDTO suDto = new SuggestionDTO();
+        suDto.setSuggestionId(suSuggestionId);
+        suDto.setTitle(getString(request.getParameter("title"), ""));
+        suDto.setContent(getString(request.getParameter("content"), ""));
+        suDto.setStatus(getString(request.getParameter("status"), ""));
+        suDto.setRemark(getString(request.getParameter("remark"), ""));
 
-        suggestionService.modifySuggestion(dto);
-        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + dto.getSuggestionId());
+        suSuggestionService.updateSuggestion(suDto);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
     }
 
-    /**
-     * 삭제
-     */
-    private void delete(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        long suggestionId = Long.parseLong(request.getParameter("suggestionId"));
-        suggestionService.removeSuggestion(suggestionId);
-
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+        suSuggestionService.deleteSuggestion(suSuggestionId);
         response.sendRedirect(request.getContextPath() + "/suggestion/list");
+    }
+
+    private void hide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+        suSuggestionService.hideSuggestion(suSuggestionId);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
+    }
+
+    private void answerInsert(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+
+        AnswerDTO anDto = new AnswerDTO();
+        anDto.setSuggestionId(suSuggestionId);
+        anDto.setStatus(getString(request.getParameter("status"), "등록"));
+        anDto.setContent(getString(request.getParameter("content"), ""));
+        anDto.setRemark(getString(request.getParameter("remark"), ""));
+        anDto.setWriterEmpId(resolveWriterEmpId(request.getSession(false)));
+
+        anAnswerService.insertAnswer(anDto);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
+    }
+
+    private void answerUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long anAnswerId = parseLong(request.getParameter("answerId"), 0L);
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+
+        AnswerDTO anDto = new AnswerDTO();
+        anDto.setAnswerId(anAnswerId);
+        anDto.setSuggestionId(suSuggestionId);
+        anDto.setStatus(getString(request.getParameter("status"), ""));
+        anDto.setContent(getString(request.getParameter("content"), ""));
+        anDto.setRemark(getString(request.getParameter("remark"), ""));
+
+        anAnswerService.updateAnswer(anDto);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
+    }
+
+    private void answerDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long anAnswerId = parseLong(request.getParameter("answerId"), 0L);
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+        anAnswerService.deleteAnswer(anAnswerId);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
+    }
+
+    private void answerHide(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        long anAnswerId = parseLong(request.getParameter("answerId"), 0L);
+        long suSuggestionId = parseLong(request.getParameter("suggestionId"), 0L);
+        anAnswerService.hideAnswer(anAnswerId);
+        response.sendRedirect(request.getContextPath() + "/suggestion/list?mode=detail&id=" + suSuggestionId);
+    }
+
+    private String getString(String value, String defaultValue) {
+        return value == null ? defaultValue : value.trim();
+    }
+
+    private int parseInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private long parseLong(String value, long defaultValue) {
+        try {
+            return Long.parseLong(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private long resolveWriterEmpId(HttpSession session) {
+        if (session != null) {
+            Object loginUserObj = session.getAttribute("loginUser");
+
+            if (loginUserObj instanceof MemberDTO) {
+                return ((MemberDTO) loginUserObj).getEmpId();
+            }
+
+            Object loginEmpId = session.getAttribute("loginEmpId");
+            if (loginEmpId instanceof Number) {
+                return ((Number) loginEmpId).longValue();
+            }
+
+            Object empId = session.getAttribute("empId");
+            if (empId instanceof Number) {
+                return ((Number) empId).longValue();
+            }
+        }
+
+        throw new IllegalStateException("로그인 사용자 정보를 찾을 수 없습니다.");
     }
 }

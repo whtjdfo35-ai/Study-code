@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.emp">
+
+	<select id="selectEmp" resultType="kr.or.human4.dto.EmpDTO">
+		select * from emp2
+<!-- 		where 1 != 1 -->
+	</select>
+	
+<!-- 	<select id="selectOneEmp" resultType="kr.or.human4.dto.EmpDTO"> -->
+	<select id="selectOneEmp" resultType="empDTO">
+		select * from emp2
+		where empno = 7369 and 1 != 1
+	</select>
+
+<!-- 	<select id="selectOneEmpMap" resultType="java.util.HashMap"> -->
+	<select id="selectOneEmpMap" resultType="hashMap">
+		select * from emp2
+		where empno = 7369
+	</select>
+
+<!-- 	<select id="selectEmpno" resultType="empDTO" -->
+<!-- 		parameterType="java.lang.Integer" -->
+<!-- 	> -->
+	<select 
+		id="selectEmpno" 
+		resultType="empDTO"
+		parameterType="int"
+	>
+		select * from emp2
+		where empno = #{_parameter}
+	</select>
+	
+<!-- 	<select id="selectEmpno" resultType="empDTO" parameterType="java.lang.String"> -->
+	<select id="selectEname" resultType="empDTO" parameterType="string">
+		select * from emp2
+		where lower(ename) like lower('%' || #{_parameter} || '%')
+	</select>
+	
+	<select id="selectJob" resultType="empDTO" parameterType="string">
+		select * from emp2
+		where lower(job) like lower('%' || '${_parameter}' || '%')
+	</select>
+	
+	<select id="selectJobEname" resultType="empDTO" parameterType="empDTO">
+		select * from emp2
+		where job = #{job} or ename = #{ename}
+	</select>
+	
+	<!-- empno는 seq_emp2에서 가져오고 나머지는 전달받은 것으로 완성하시오 -->
+	<insert id="insertEmp2" parameterType="empDTO">
+		insert into emp2(
+			empno,
+			ename,
+			job,
+			sal,
+			mgr,
+			hiredate,
+			comm,
+			deptno
+		) values (
+			seq_emp2.nextval,
+			#{ename},
+			#{job},
+			#{sal},
+			#{mgr},
+			#{hiredate},
+			#{comm},
+			#{deptno}
+		)
+	</insert>
+	
+	<update id="updateEmp2" parameterType="empDTO">
+		update emp2
+		set 
+			ename = #{ename},
+			job = #{job},
+			sal = #{sal},
+			mgr = #{mgr},
+			hiredate = #{hiredate},
+			comm = #{comm},
+			deptno = #{deptno}
+		where
+			empno = #{empno}
+	</update>
+	
+	<delete id="deleteEmp2" parameterType="empDTO">
+		delete emp2
+		where
+			empno = #{empno}
+	</delete>
+	
+	<select id="login" resultType="empDTO" parameterType="empDTO">
+		select * from emp2
+		where 
+			ename = #{ename}
+			and empno = #{empno}
+	</select>
+	
+	<select id="getSeqDept2" resultType="int">
+		SELECT seq_dept2.nextval FROM dual
+	</select>
+	
+	<insert id="insertDept2" parameterType="deptDTO">
+		<selectKey resultType="int" keyProperty="deptno" order="BEFORE">
+			SELECT seq_dept2.nextval FROM dual
+		</selectKey>
+	
+		insert into dept2(
+			deptno,
+			dname,
+			loc
+		) values (
+			#{deptno},
+			#{dname},
+			#{loc}
+		)
+	</insert>
+	
+	<insert 
+		id="insert2Dept2"
+		parameterType="deptDTO"
+		useGeneratedKeys="true"
+		keyProperty="deptno">
+
+		insert into dept2(
+			deptno,
+			dname,
+			loc
+		) values (
+			seq_dept2.nextval,
+			#{dname},
+			#{loc}
+		)
+	</insert>
+	
+</mapper>
+
